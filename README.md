@@ -32,6 +32,7 @@ Ce projet a lieu dans le cadre des Situations d'Apprentissage et Évaluation du 
   * **Enseignants :**
       [Irène Larramendy](mailto:irene.larramendy-valverde@umontpellier.fr),
       [Alain Marie-Jeanne](mailto:alain.marie-jeanne@umontpellier.fr)
+
 * **Phase 3 : _implémentation d'une interface graphique sous [JavaFX](https://openjfx.io/)_**
   * **Cours concerné** : _Interface Homme-Machine_
   * **Enseignants :**

@@ -118,20 +118,7 @@ public class Jeu implements Runnable {
             }
         }
 
-        // distribution des cartes destination
-        ArrayList<Destination> destinationsLongues = new ArrayList<>();
-        pileDestinations = Destination.makeDestinationsEurope();
-        destinationsLongues = Destination.makeDestinationsLonguesEurope();
-        Collections.shuffle(destinationsLongues);
-        Collections.shuffle(pileDestinations);
-        for (Joueur joueur : joueurs) {
-            joueur.getDestinations().add(destinationsLongues.get(0));
-            destinationsLongues.remove(0);
-            for (int i = 0; i < 3; i++) {
-                joueur.getDestinations().add(pileDestinations.get(0));
-                pileDestinations.remove(0);
-            }
-        }
+
 
 
         // création des villes et des routes
@@ -184,6 +171,20 @@ public class Jeu implements Runnable {
          * interagir avec l'utilisateur, il n'a rien à voir avec le code de la partie et
          * doit donc être entièrement réécrit.
          */
+        // distribution des cartes destination
+        ArrayList<Destination> destinationsLongues = new ArrayList<>();
+        pileDestinations = Destination.makeDestinationsEurope();
+        destinationsLongues = Destination.makeDestinationsLonguesEurope();
+        Collections.shuffle(destinationsLongues);
+        Collections.shuffle(pileDestinations);
+        for (Joueur joueur : joueurs) {
+            joueur.getDestinations().add(destinationsLongues.get(0));
+            destinationsLongues.remove(0);
+            for (int i = 0; i < 3; i++) {
+                joueur.getDestinations().add(pileDestinations.get(0));
+                pileDestinations.remove(0);
+            }
+        }
 
         // Exemple d'utilisation
         while (true) {

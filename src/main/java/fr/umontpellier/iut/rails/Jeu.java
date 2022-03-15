@@ -105,6 +105,19 @@ public class Jeu implements Runnable {
             }
         }
 
+        for (int i = 0, loco = 0; i<5; i++){
+            if(pileCartesWagon.get(0)==CouleurWagon.LOCOMOTIVE){
+                loco++;
+            }
+            cartesWagonVisibles.add(pileCartesWagon.get(0));
+            pileCartesWagon.remove(0);
+            if(loco == 3){
+                defausseCartesWagon.addAll(cartesWagonVisibles);
+                cartesWagonVisibles.removeAll(cartesWagonVisibles);
+                i=0;
+            }
+        }
+
 
         // création des villes et des routes
         Plateau plateau = Plateau.makePlateauEurope();

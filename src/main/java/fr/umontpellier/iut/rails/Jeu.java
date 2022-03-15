@@ -56,7 +56,7 @@ public class Jeu implements Runnable {
     public Jeu(String[] nomJoueurs) {
         /*
          * ATTENTION : Cette méthode est à réécrire.
-         * 
+         *
          * Le code indiqué ici est un squelette minimum pour que le jeu se lance et que
          * l'interface graphique fonctionne.
          * Vous devez modifier ce code pour que les différents éléments du jeu soient
@@ -83,11 +83,11 @@ public class Jeu implements Runnable {
         }
         joueurCourant = joueurs.get(0);
 
-        // distribution et placement des cartes
-        for (int i=0; i<14; i++){
+        // distribution et placement des cartes wagon
+        for (int i = 0; i < 14; i++) {
             pileCartesWagon.add(CouleurWagon.LOCOMOTIVE);
         }
-        for (int i=0; i<12; i++){
+        for (int i = 0; i < 12; i++) {
             pileCartesWagon.add(CouleurWagon.BLANC);
             pileCartesWagon.add(CouleurWagon.BLEU);
             pileCartesWagon.add(CouleurWagon.ROSE);
@@ -98,23 +98,38 @@ public class Jeu implements Runnable {
             pileCartesWagon.add(CouleurWagon.VERT);
         }
         Collections.shuffle(pileCartesWagon);
-        for (Joueur joueur : joueurs){
-            for (int i=0; i<4; i++){
+        for (Joueur joueur : joueurs) {
+            for (int i = 0; i < 4; i++) {
                 joueur.getCartesWagon().add(pileCartesWagon.get(0));
                 pileCartesWagon.remove(0);
             }
         }
 
-        for (int i = 0, loco = 0; i<5; i++){
-            if(pileCartesWagon.get(0)==CouleurWagon.LOCOMOTIVE){
+        for (int i = 0, loco = 0; i < 5; i++) {
+            if (pileCartesWagon.get(0) == CouleurWagon.LOCOMOTIVE) {
                 loco++;
             }
             cartesWagonVisibles.add(pileCartesWagon.get(0));
             pileCartesWagon.remove(0);
-            if(loco == 3){
+            if (loco == 3) {
                 defausseCartesWagon.addAll(cartesWagonVisibles);
                 cartesWagonVisibles.removeAll(cartesWagonVisibles);
-                i=0;
+                i = 0;
+            }
+        }
+
+        // distribution des cartes destination
+        ArrayList<Destination> destinationsLongues = new ArrayList<>();
+        pileDestinations = Destination.makeDestinationsEurope();
+        destinationsLongues = Destination.makeDestinationsLonguesEurope();
+        Collections.shuffle(destinationsLongues);
+        Collections.shuffle(pileDestinations);
+        for (Joueur joueur : joueurs) {
+            joueur.getDestinations().add(destinationsLongues.get(0));
+            destinationsLongues.remove(0);
+            for (int i = 0; i < 3; i++) {
+                joueur.getDestinations().add(pileDestinations.get(0));
+                pileDestinations.remove(0);
             }
         }
 
@@ -151,7 +166,7 @@ public class Jeu implements Runnable {
     public void run() {
         /*
          * ATTENTION : Cette méthode est à réécrire.
-         * 
+         *
          * Cette méthode doit :
          * - faire choisir à chaque joueur les destinations initiales qu'il souhaite
          * garder : on pioche 3 destinations "courtes" et 1 destination "longue", puis
@@ -169,7 +184,7 @@ public class Jeu implements Runnable {
          * interagir avec l'utilisateur, il n'a rien à voir avec le code de la partie et
          * doit donc être entièrement réécrit.
          */
-        
+
         // Exemple d'utilisation
         while (true) {
             // le joueur doit choisir une valeur parmi "1", "2", "3", "4", "6" ou "8"
@@ -242,9 +257,9 @@ public class Jeu implements Runnable {
 
     /**
      * Pioche et renvoie la destination du dessus de la pile de destinations.
-     * 
+     *
      * @return la destination qui a été piochée (ou `null` si aucune destination
-     *         disponible)
+     * disponible)
      */
     public Destination piocherDestination() {
         throw new RuntimeException("Méthode non implémentée !");
@@ -283,7 +298,7 @@ public class Jeu implements Runnable {
      * l'entrée clavier de l'utilisateur (par exemple dans {@code Player.choisir})
      *
      * @return une chaîne de caractères correspondant à l'entrée suivante dans la
-     *         file
+     * file
      */
     public String lireLigne() {
         try {

@@ -83,6 +83,29 @@ public class Jeu implements Runnable {
         }
         joueurCourant = joueurs.get(0);
 
+        // distribution et placement des cartes
+        for (int i=0; i<14; i++){
+            pileCartesWagon.add(CouleurWagon.LOCOMOTIVE);
+        }
+        for (int i=0; i<12; i++){
+            pileCartesWagon.add(CouleurWagon.BLANC);
+            pileCartesWagon.add(CouleurWagon.BLEU);
+            pileCartesWagon.add(CouleurWagon.ROSE);
+            pileCartesWagon.add(CouleurWagon.ROUGE);
+            pileCartesWagon.add(CouleurWagon.ORANGE);
+            pileCartesWagon.add(CouleurWagon.GRIS);
+            pileCartesWagon.add(CouleurWagon.NOIR);
+            pileCartesWagon.add(CouleurWagon.VERT);
+        }
+        Collections.shuffle(pileCartesWagon);
+        for (Joueur joueur : joueurs){
+            for (int i=0; i<4; i++){
+                joueur.getCartesWagon().add(pileCartesWagon.get(0));
+                pileCartesWagon.remove(0);
+            }
+        }
+
+
         // création des villes et des routes
         Plateau plateau = Plateau.makePlateauEurope();
         villes = plateau.getVilles();

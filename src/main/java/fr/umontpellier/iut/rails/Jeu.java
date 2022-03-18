@@ -119,8 +119,6 @@ public class Jeu implements Runnable {
         }
 
 
-
-
         // création des villes et des routes
         Plateau plateau = Plateau.makePlateauEurope();
         villes = plateau.getVilles();
@@ -178,12 +176,15 @@ public class Jeu implements Runnable {
         Collections.shuffle(destinationsLongues);
         Collections.shuffle(pileDestinations);
         for (Joueur joueur : joueurs) {
-            joueur.getDestinations().add(destinationsLongues.get(0));
+            joueurCourant = joueur;
+            ArrayList<Destination> choixDestinations = new ArrayList<>();
+            choixDestinations.add(destinationsLongues.get(0));
             destinationsLongues.remove(0);
             for (int i = 0; i < 3; i++) {
-                joueur.getDestinations().add(pileDestinations.get(0));
+                choixDestinations.add(pileDestinations.get(0));
                 pileDestinations.remove(0);
             }
+            pileDestinations.addAll(joueur.choisirDestinations(choixDestinations, 2));
         }
 
         // Exemple d'utilisation

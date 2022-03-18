@@ -233,7 +233,28 @@ public class Joueur {
      * @return liste des destinations qui n'ont pas été gardées par le joueur
      */
     public List<Destination> choisirDestinations(List<Destination> destinationsPossibles, int n) {
-        throw new RuntimeException("Méthode non implémentée !");
+        ArrayList<String> bouton = new ArrayList<>();
+        for (int i = 0; i < 4; i++) {
+            bouton.add(destinationsPossibles.get(i).toString());
+        }
+        boolean peutPasser = true;
+
+        String choix = ".";
+        int i = 4;
+
+        List<Destination> nonChoisi = new ArrayList<>();
+        while (!choix.isEmpty()) {
+            choix = choisir("Choisir entre 2 et 4 cartes à garder : ", new ArrayList<>(), bouton, peutPasser);
+            i--;
+            for (Destination destination : destinationsPossibles) {
+                if (destination.getNom().equals(choix)) {
+                    nonChoisi.add(destination);
+                }
+            }
+        }
+        destinationsPossibles.removeAll(nonChoisi);
+        destinations.addAll(destinationsPossibles);
+        return destinationsPossibles;
     }
 
     /**

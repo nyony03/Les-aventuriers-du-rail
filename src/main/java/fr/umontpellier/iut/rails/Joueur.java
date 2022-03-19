@@ -239,13 +239,12 @@ public class Joueur {
         }
         boolean peutPasser = true;
 
+        int i = 0;
         String choix = ".";
-        int i = 4;
-
         List<Destination> nonChoisi = new ArrayList<>();
-        while (!choix.isEmpty()) {
+        while (!choix.isEmpty() && i<n) {
             choix = choisir("Choisir entre 2 et 4 cartes à garder : ", new ArrayList<>(), bouton, peutPasser);
-            i--;
+            i++;
             for (Destination destination : destinationsPossibles) {
                 if (destination.getNom().equals(choix)) {
                     nonChoisi.add(destination);
@@ -254,7 +253,7 @@ public class Joueur {
         }
         destinationsPossibles.removeAll(nonChoisi);
         destinations.addAll(destinationsPossibles);
-        return destinationsPossibles;
+        return nonChoisi;
     }
 
     /**

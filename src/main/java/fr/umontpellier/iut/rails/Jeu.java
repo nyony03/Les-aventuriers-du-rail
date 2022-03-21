@@ -93,15 +93,13 @@ public class Jeu implements Runnable {
             pileCartesWagon.add(CouleurWagon.ROSE);
             pileCartesWagon.add(CouleurWagon.ROUGE);
             pileCartesWagon.add(CouleurWagon.ORANGE);
-            pileCartesWagon.add(CouleurWagon.GRIS);
             pileCartesWagon.add(CouleurWagon.NOIR);
             pileCartesWagon.add(CouleurWagon.VERT);
         }
         Collections.shuffle(pileCartesWagon);
         for (Joueur joueur : joueurs) {
             for (int i = 0; i < 4; i++) {
-                joueur.getCartesWagon().add(pileCartesWagon.get(0));
-                pileCartesWagon.remove(0);
+                joueur.getCartesWagon().add(pileCartesWagon.remove(0));
             }
         }
 
@@ -109,8 +107,7 @@ public class Jeu implements Runnable {
             if (pileCartesWagon.get(0) == CouleurWagon.LOCOMOTIVE) {
                 loco++;
             }
-            cartesWagonVisibles.add(pileCartesWagon.get(0));
-            pileCartesWagon.remove(0);
+            cartesWagonVisibles.add(pileCartesWagon.remove(0));
             if (loco == 3) {
                 defausseCartesWagon.addAll(cartesWagonVisibles);
                 cartesWagonVisibles.removeAll(cartesWagonVisibles);
@@ -178,17 +175,16 @@ public class Jeu implements Runnable {
         for (Joueur joueur : joueurs) {
             joueurCourant = joueur;
             ArrayList<Destination> choixDestinations = new ArrayList<>();
-            choixDestinations.add(destinationsLongues.get(0));
-            destinationsLongues.remove(0);
+            choixDestinations.add(destinationsLongues.remove(0));
             for (int i = 0; i < 3; i++) {
-                choixDestinations.add(pileDestinations.get(0));
-                pileDestinations.remove(0);
+                choixDestinations.add(pileDestinations.remove(0));
             }
             pileDestinations.addAll(joueur.choisirDestinations(choixDestinations, 2));
         }
+        joueurCourant = joueurs.get(0);
 
         // Exemple d'utilisation
-        while (true) {
+        while (joueurCourant.getNbWagons()>2) {
             // le joueur doit choisir une valeur parmi "1", "2", "3", "4", "6" ou "8"
             // les choix possibles sont présentés sous forme de boutons cliquables
             String choix = joueurCourant.choisir(
@@ -245,7 +241,15 @@ public class Jeu implements Runnable {
      * @return la carte qui a été piochée (ou null si aucune carte disponible)
      */
     public CouleurWagon piocherCarteWagon() {
-        throw new RuntimeException("Méthode non implémentée !");
+        if (pileCartesWagon.isEmpty() && defausseCartesWagon.isEmpty()) {
+            return null;
+        }
+        if (pileCartesWagon.isEmpty()){
+            pileCartesWagon.addAll(defausseCartesWagon);
+            defausseCartesWagon.removeAll(defausseCartesWagon);
+            Collections.shuffle(pileCartesWagon);
+        }
+        return pileCartesWagon.remove(0);
     }
 
     /**
@@ -264,7 +268,11 @@ public class Jeu implements Runnable {
      * disponible)
      */
     public Destination piocherDestination() {
-        throw new RuntimeException("Méthode non implémentée !");
+        if (pileDestinations.isEmpty()){
+            return null;
+        } else {
+            return pileDestinations.remove(0);
+        }
     }
 
     public List<Joueur> getJoueurs() {

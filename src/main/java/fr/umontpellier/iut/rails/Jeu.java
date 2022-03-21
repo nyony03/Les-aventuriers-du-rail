@@ -184,7 +184,7 @@ public class Jeu implements Runnable {
         joueurCourant = joueurs.get(0);
 
         // Exemple d'utilisation
-        while (joueurCourant.getNbWagons()>2) {
+        while (joueurCourant.getNbWagons() > 2) {
             // le joueur doit choisir une valeur parmi "1", "2", "3", "4", "6" ou "8"
             // les choix possibles sont présentés sous forme de boutons cliquables
             String choix = joueurCourant.choisir(
@@ -229,8 +229,13 @@ public class Jeu implements Runnable {
      *
      * @param c carte à défausser
      */
+
     public void defausserCarteWagon(CouleurWagon c) {
-        throw new RuntimeException("Méthode non implémentée !");
+        if (pileCartesWagon.isEmpty() && defausseCartesWagon.isEmpty() && cartesWagonVisibles.size() < 5) {
+            cartesWagonVisibles.add(c);
+        } else {
+            defausseCartesWagon.add(c);
+        }
     }
 
     /**
@@ -244,7 +249,7 @@ public class Jeu implements Runnable {
         if (pileCartesWagon.isEmpty() && defausseCartesWagon.isEmpty()) {
             return null;
         }
-        if (pileCartesWagon.isEmpty()){
+        if (pileCartesWagon.isEmpty()) {
             pileCartesWagon.addAll(defausseCartesWagon);
             defausseCartesWagon.removeAll(defausseCartesWagon);
             Collections.shuffle(pileCartesWagon);
@@ -258,7 +263,17 @@ public class Jeu implements Runnable {
      * (remise à 5, éventuellement remélangée si 3 locomotives visibles)
      */
     public void retirerCarteWagonVisible(CouleurWagon c) {
-        throw new RuntimeException("Méthode non implémentée !");
+        cartesWagonVisibles.remove(c);
+        int locomotive = 0;
+        while (cartesWagonVisibles.size() < 5){
+            cartesWagonVisibles.add(pileCartesWagon.remove(0));
+            if(pileCartesWagon.get(pileCartesWagon.size()-1) == CouleurWagon.LOCOMOTIVE){
+                locomotive++;
+            }
+            if(locomotive == 3){
+                cartesWagonVisibles.removeAll(defausseCartesWagon);
+            }
+        }
     }
 
     /**
@@ -268,7 +283,7 @@ public class Jeu implements Runnable {
      * disponible)
      */
     public Destination piocherDestination() {
-        if (pileDestinations.isEmpty()){
+        if (pileDestinations.isEmpty()) {
             return null;
         } else {
             return pileDestinations.remove(0);

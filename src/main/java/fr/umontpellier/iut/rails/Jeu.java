@@ -183,6 +183,10 @@ public class Jeu implements Runnable {
         }
         joueurCourant = joueurs.get(0);
 
+        joueurCourant.jouerTour();
+
+
+
         // Exemple d'utilisation
         while (joueurCourant.getNbWagons() > 2) {
             // le joueur doit choisir une valeur parmi "1", "2", "3", "4", "6" ou "8"

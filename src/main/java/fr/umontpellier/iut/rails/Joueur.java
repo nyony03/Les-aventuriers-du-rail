@@ -276,6 +276,41 @@ public class Joueur {
      * "construire une gare", "choisir les destinations à défausser", etc.)
      */
     public void jouerTour() {
-        throw new RuntimeException("Méthode non implémentée !");
+        ArrayList<String> choixBouton = new ArrayList<>();
+        ArrayList<String> choixInteractif = new ArrayList<>();
+        for (CouleurWagon couleurWagon : jeu.getCartesWagonVisibles()){
+            choixInteractif.add(""+couleurWagon);
+        }
+        choixInteractif.add("GRIS");
+        choixInteractif.add("destinations");
+        if(nbGares>0){
+            for (Ville gare : jeu.getVilles()) {
+                if (gare.getNom().equals("null")) {
+                    choixInteractif.add(gare.getNom());
+                }
+            }
+        }
+        for (Route route : jeu.getRoutes()){
+            if(route.getProprietaire() == null){
+                choixInteractif.add(route.getNom());
+            }
+        }
+        choixBouton.addAll(choixInteractif);
+        String choix = ".";
+        boolean peutPasser = true;
+        choix = choisir(getNom()+", à votre tour.", choixInteractif, choixBouton, peutPasser);
+
+        if (choix.equals("GRIS")){
+            cartesWagon.add(jeu.piocherCarteWagon());
+            cartesWagon.add(jeu.piocherCarteWagon());
+        }
+        if (choix.equals("destinations")){
+            ArrayList<Destination> destinationsPiochees = new ArrayList<>();
+            while(destinationsPiochees.size() <= 3){
+                destinationsPiochees.add(jeu.piocherDestination());
+            }
+            choisirDestinations(destinationsPiochees, 1);
+        }
     }
+
 }

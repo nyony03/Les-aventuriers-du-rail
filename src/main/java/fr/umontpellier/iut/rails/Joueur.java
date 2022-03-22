@@ -278,23 +278,28 @@ public class Joueur {
     public void jouerTour() {
         ArrayList<String> choixBouton = new ArrayList<>();
         ArrayList<String> choixInteractif = new ArrayList<>();
+        ArrayList<String> garePossible = new ArrayList<>();
+        ArrayList<String> routePossible = new ArrayList<>();
         for (CouleurWagon couleurWagon : jeu.getCartesWagonVisibles()){
             choixInteractif.add(""+couleurWagon);
         }
         choixInteractif.add("GRIS");
         choixInteractif.add("destinations");
-        if(nbGares>0){
+        if(nbGares==3 && nbMaxCarteSimilaire()>=1 || nbGares == 2 && nbMaxCarteSimilaire() >= 2 || nbGares == 1 && nbMaxCarteSimilaire() >= 3){
             for (Ville gare : jeu.getVilles()) {
                 if (gare.getNom().equals("null")) {
-                    choixInteractif.add(gare.getNom());
+                    garePossible.add(gare.getNom());
                 }
             }
         }
         for (Route route : jeu.getRoutes()){
-            if(route.getProprietaire() == null){
-                choixInteractif.add(route.getNom());
+            boolean nbCarteSuffisant = nbCarteSuffisant(route);
+            if(route.getProprietaire() == null && nbCarteSuffisant){
+                routePossible.add(route.getNom());
             }
         }
+        choixInteractif.addAll(routePossible);
+        choixInteractif.addAll(garePossible);
         choixBouton.addAll(choixInteractif);
         String choix = ".";
         boolean peutPasser = true;
@@ -303,14 +308,52 @@ public class Joueur {
         if (choix.equals("GRIS")){
             cartesWagon.add(jeu.piocherCarteWagon());
             cartesWagon.add(jeu.piocherCarteWagon());
-        }
-        if (choix.equals("destinations")){
+        } else if (choix.equals("destinations")){
             ArrayList<Destination> destinationsPiochees = new ArrayList<>();
             while(destinationsPiochees.size() <= 3){
                 destinationsPiochees.add(jeu.piocherDestination());
             }
             choisirDestinations(destinationsPiochees, 1);
         }
+        for (String route : routePossible){
+            if(choix.equals(route)){
+
+            }
+        }
+
     }
+
+    public boolean nbCarteSuffisant(Route r){
+        int nbCouleur = 0;
+        for (CouleurWagon carteWagon : cartesWagon){
+            if (carteWagon.equals(r.getCouleur())){
+                nbCouleur++;
+            }
+            if (carteWagon.equals(CouleurWagon.LOCOMOTIVE)){
+                nbCouleur++;
+            }
+            if (r.getCouleur().equals(CouleurWagon.GRIS) && nbMaxCarteSimilaire() >= r.getLongueur()){
+                return true;
+            }
+        }
+        return (cartesWagon.contains(r.getCouleur()) && r.getLongueur() <= nbCouleur);
+    }
+
+    public int nbMaxCarteSimilaire(){
+        int nbMaxCarteSimilaire = 0;
+        int nbCarteSimilaire = 0;
+        for(CouleurWagon couleur : CouleurWagon.getCouleursSimples()){
+            for(CouleurWagon carte : cartesWagon){
+                if(carte.equals(couleur)){
+                    nbCarteSimilaire++;
+                }
+            }
+            if(nbCarteSimilaire>nbMaxCarteSimilaire){
+                nbMaxCarteSimilaire++;
+            }
+        }
+       return nbMaxCarteSimilaire;
+    }
+
 
 }

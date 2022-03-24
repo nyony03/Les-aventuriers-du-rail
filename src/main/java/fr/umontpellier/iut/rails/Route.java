@@ -90,4 +90,21 @@ public class Route {
         }
         return data;
     }
+
+    public boolean nbCarteRequis(Route r, Joueur j) {
+        int nbCouleur = 0;
+        if (r.getCouleur().equals(CouleurWagon.GRIS) && j.nbMaxCarteSimilaire() >= r.getLongueur()) {
+            return true;
+        }
+        for (CouleurWagon carteWagon : j.getCartesWagon()) {
+            if (carteWagon.equals(r.getCouleur())) {
+                nbCouleur++;
+            }
+            if (carteWagon.equals(CouleurWagon.LOCOMOTIVE)) {
+                nbCouleur++;
+            }
+        }
+        return (j.getCartesWagon().contains(r.getCouleur()) && r.getLongueur() <= nbCouleur);
+    }
 }
+

@@ -10,6 +10,11 @@ public class Ferry extends Route {
         super(ville1, ville2, longueur, couleur);
         this.nbLocomotives = nbLocomotives;
     }
+//
+//    @Override
+//    public boolean nbCarteRequis(Route r, Joueur j) {
+//
+//    }
 
     @Override
     public String toString() {

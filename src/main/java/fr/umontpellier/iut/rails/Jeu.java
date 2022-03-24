@@ -182,7 +182,6 @@ public class Jeu implements Runnable {
             pileDestinations.addAll(joueur.choisirDestinations(choixDestinations, 2));
         }
         joueurCourant = joueurs.get(0);
-
         joueurCourant.jouerTour();
 
 

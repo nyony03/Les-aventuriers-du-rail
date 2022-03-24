@@ -276,7 +276,6 @@ public class Joueur {
      * "construire une gare", "choisir les destinations à défausser", etc.)
      */
     public void jouerTour() {
-        ArrayList<String> choixBouton = new ArrayList<>();
         ArrayList<String> choixInteractif = new ArrayList<>();
         ArrayList<String> garePossible = new ArrayList<>();
         ArrayList<String> routePossible = new ArrayList<>();
@@ -293,14 +292,14 @@ public class Joueur {
             }
         }
         for (Route route : jeu.getRoutes()){
-            boolean nbCarteSuffisant = nbCarteSuffisant(route);
+            boolean nbCarteSuffisant = route.nbCarteRequis(route, this);
             if(route.getProprietaire() == null && nbCarteSuffisant){
                 routePossible.add(route.getNom());
             }
         }
         choixInteractif.addAll(routePossible);
         choixInteractif.addAll(garePossible);
-        choixBouton.addAll(choixInteractif);
+        ArrayList<String> choixBouton = new ArrayList<>(choixInteractif);
         String choix = ".";
         boolean peutPasser = true;
         choix = choisir(getNom()+", à votre tour.", choixInteractif, choixBouton, peutPasser);
@@ -315,28 +314,22 @@ public class Joueur {
             }
             choisirDestinations(destinationsPiochees, 1);
         }
-        for (String route : routePossible){
-            if(choix.equals(route)){
-
-            }
-        }
+//        for (String route : routePossible){
+//            if(choix.equals(route)){
+//
+//            }
+//        }
 
     }
 
-    public boolean nbCarteSuffisant(Route r){
-        int nbCouleur = 0;
-        for (CouleurWagon carteWagon : cartesWagon){
-            if (carteWagon.equals(r.getCouleur())){
-                nbCouleur++;
-            }
-            if (carteWagon.equals(CouleurWagon.LOCOMOTIVE)){
-                nbCouleur++;
-            }
-            if (r.getCouleur().equals(CouleurWagon.GRIS) && nbMaxCarteSimilaire() >= r.getLongueur()){
-                return true;
+    public int nbCartesLocomotives(){
+        int nbLocomotive = 0;
+        for (CouleurWagon carteWagon : cartesWagon) {
+            if (carteWagon.equals(CouleurWagon.LOCOMOTIVE)) {
+                nbLocomotive++;
             }
         }
-        return (cartesWagon.contains(r.getCouleur()) && r.getLongueur() <= nbCouleur);
+        return nbLocomotive;
     }
 
     public int nbMaxCarteSimilaire(){

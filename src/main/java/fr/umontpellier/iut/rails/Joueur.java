@@ -243,7 +243,7 @@ public class Joueur {
         String choix = ".";
         List<Destination> nonChoisi = new ArrayList<>();
         while (!choix.isEmpty() && i<n) {
-            choix = choisir("Choisir entre 2 et 4 cartes à garder : ", new ArrayList<>(), bouton, peutPasser);
+            choix = choisir("Défausser jusqu'à 2 cartes : ", new ArrayList<>(), bouton, peutPasser);
             i++;
             for (Destination destination : destinationsPossibles) {
                 if (destination.getNom().equals(choix)) {
@@ -277,8 +277,8 @@ public class Joueur {
      */
     public void jouerTour() {
         ArrayList<String> choixInteractif = new ArrayList<>();
-        ArrayList<String> garePossible = new ArrayList<>();
-        ArrayList<String> routePossible = new ArrayList<>();
+        ArrayList<Ville> garePossible = new ArrayList<>();
+        ArrayList<Route> routePossible = new ArrayList<>();
         for (CouleurWagon couleurWagon : jeu.getCartesWagonVisibles()){
             choixInteractif.add(""+couleurWagon);
         }
@@ -287,22 +287,21 @@ public class Joueur {
         if(nbGares==3 && nbMaxCarteSimilaire()>=1 || nbGares == 2 && nbMaxCarteSimilaire() >= 2 || nbGares == 1 && nbMaxCarteSimilaire() >= 3){
             for (Ville gare : jeu.getVilles()) {
                 if (gare.getNom().equals("null")) {
-                    garePossible.add(gare.getNom());
+                    choixInteractif.add(gare.getNom());
+                    garePossible.add(gare);
                 }
             }
         }
         for (Route route : jeu.getRoutes()){
-            boolean nbCarteSuffisant = route.nbCarteRequis(route, this);
-            if(route.getProprietaire() == null && nbCarteSuffisant){
-                routePossible.add(route.getNom());
+            if(route.getProprietaire() == null && route.nbCarteRequis( this)){
+                choixInteractif.add(route.getNom());
+                routePossible.add(route);
             }
         }
-        choixInteractif.addAll(routePossible);
-        choixInteractif.addAll(garePossible);
         ArrayList<String> choixBouton = new ArrayList<>(choixInteractif);
         String choix = ".";
         boolean peutPasser = true;
-        choix = choisir(getNom()+", à votre tour.", choixInteractif, choixBouton, peutPasser);
+        choix = choisir(getNom()+", choisis parmi les propositions suivante :", choixInteractif, choixBouton, peutPasser);
 
         if (choix.equals("GRIS")){
             cartesWagon.add(jeu.piocherCarteWagon());
@@ -314,11 +313,11 @@ public class Joueur {
             }
             choisirDestinations(destinationsPiochees, 1);
         }
-//        for (String route : routePossible){
-//            if(choix.equals(route)){
-//
-//            }
-//        }
+        for (Route route : routePossible){
+            if(choix.equals(route.getNom())){
+                route.setProprietaire(this);
+            }
+        }
 
     }
 

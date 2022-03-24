@@ -91,20 +91,20 @@ public class Route {
         return data;
     }
 
-    public boolean nbCarteRequis(Route r, Joueur j) {
+    public boolean nbCarteRequis(Joueur j) {
         int nbCouleur = 0;
-        if (r.getCouleur().equals(CouleurWagon.GRIS) && j.nbMaxCarteSimilaire() >= r.getLongueur()) {
+        if (getCouleur().equals(CouleurWagon.GRIS) && j.nbMaxCarteSimilaire() >= getLongueur()) {
             return true;
         }
         for (CouleurWagon carteWagon : j.getCartesWagon()) {
-            if (carteWagon.equals(r.getCouleur())) {
+            if (carteWagon.equals(getCouleur())) {
                 nbCouleur++;
             }
             if (carteWagon.equals(CouleurWagon.LOCOMOTIVE)) {
                 nbCouleur++;
             }
         }
-        return (j.getCartesWagon().contains(r.getCouleur()) && r.getLongueur() <= nbCouleur);
+        return (j.getCartesWagon().contains(getCouleur()) && getLongueur() <= nbCouleur);
     }
 }
 

@@ -286,7 +286,7 @@ public class Joueur {
         choixInteractif.add("destinations");
         if(nbGares==3 && nbMaxCarteSimilaire()>=1 || nbGares == 2 && nbMaxCarteSimilaire() >= 2 || nbGares == 1 && nbMaxCarteSimilaire() >= 3){
             for (Ville gare : jeu.getVilles()) {
-                if (gare.getNom().equals("null")) {
+                if (gare.getProprietaire() == null) {
                     choixInteractif.add(gare.getNom());
                     garePossible.add(gare);
                 }
@@ -316,6 +316,11 @@ public class Joueur {
         for (Route route : routePossible){
             if(choix.equals(route.getNom())){
                 route.setProprietaire(this);
+            }
+        }
+        for (Ville ville : garePossible){
+            if(choix.equals(ville.getNom())){
+                ville.setProprietaire(this);
             }
         }
 

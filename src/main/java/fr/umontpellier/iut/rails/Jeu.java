@@ -142,6 +142,14 @@ public class Jeu implements Runnable {
         return joueurCourant;
     }
 
+    public List<CouleurWagon> getDefausseCartesWagon() {
+        return defausseCartesWagon;
+    }
+
+    public List<Destination> getPileDestinations() {
+        return pileDestinations;
+    }
+
     /**
      * Exécute la partie
      */

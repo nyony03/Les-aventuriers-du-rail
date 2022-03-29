@@ -319,7 +319,7 @@ public class Joueur {
         }
         for (Route route : routePossible) {
             if (choix.equals(route.getNom())) {
-                choisirCarteRoute(route);
+                route.utilisationRoute(this);
                 route.setProprietaire(this);
                 scoreJoueur(route.getLongueur());
             }
@@ -397,18 +397,6 @@ public class Joueur {
             } else {
                 choixBouton.remove("LOCOMOTIVE");
             }
-        }
-    }
-
-    public void choisirCarteRoute(Route route) {
-        ArrayList<CouleurWagon> choix = route.utilisationRoute(this);
-        if (choix.isEmpty()) {
-            for (int i = 0; i < route.getLongueur(); i++) {
-                cartesWagonPosees.add(route.getCouleur());
-                cartesWagon.remove(route.getCouleur());
-            }
-        } else {
-            choisirCarteWagon(choix, route.getLongueur());
         }
     }
 

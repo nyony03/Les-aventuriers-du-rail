@@ -1,5 +1,8 @@
 package fr.umontpellier.iut.rails;
 
+import java.util.ArrayList;
+import java.util.Collections;
+
 public class Ferry extends Route {
     /**
      * Nombre de locomotives qu'un joueur doit payer pour capturer le ferry
@@ -20,6 +23,24 @@ public class Ferry extends Route {
     public String toString() {
         return String.format("[%s - %s (%d, %s, %d)]", getVille1(), getVille2(), getLongueur(), getCouleur(),
                 nbLocomotives);
+    }
+
+    @Override
+    public void utilisationRoute(Joueur j) {
+        ArrayList<CouleurWagon> choix = new ArrayList<>();
+        for(int i = 0; i < nbLocomotives; i++){
+            j.getCartesWagonPosees().add(CouleurWagon.LOCOMOTIVE);
+            j.getCartesWagon().remove(CouleurWagon.LOCOMOTIVE);
+        }
+        for(CouleurWagon couleurExistante : CouleurWagon.getCouleursSimples()){
+            int frequence = Collections.frequency(j.getCartesWagon(), couleurExistante);
+            if( frequence >= (getLongueur()-nbLocomotives)){
+                for(int f = 0; f < frequence; f++){
+                    choix.add(couleurExistante);
+                }
+            }
+        }
+        j.choisirCarteWagon(choix, getLongueur()-nbLocomotives);
     }
 
 }

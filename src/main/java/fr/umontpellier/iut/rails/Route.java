@@ -1,6 +1,9 @@
 package fr.umontpellier.iut.rails;
 
 import java.util.HashMap;
+import java.util.Collections;
+import java.util.ArrayList;
+
 
 public class Route {
     /**
@@ -105,6 +108,25 @@ public class Route {
             }
         }
         return (j.getCartesWagon().contains(getCouleur()) && getLongueur() <= nbCouleur);
+    }
+
+    public ArrayList<CouleurWagon> utilisationRoute(Joueur j) {
+        ArrayList<CouleurWagon> choix = new ArrayList<>();
+        if (couleur.equals(CouleurWagon.GRIS)) {
+            int frequenceLoco = Collections.frequency(j.getCartesWagon(), CouleurWagon.LOCOMOTIVE);
+            for (CouleurWagon couleurCarte : CouleurWagon.getCouleursSimples()) {
+                int frequenceCouleur = Collections.frequency(j.getCartesWagon(), couleurCarte);
+                if (frequenceCouleur + frequenceLoco >= (getLongueur())) {
+                    for (int f = 0; f < frequenceCouleur; f++) {
+                        choix.add(couleurCarte);
+                    }
+                }
+            }
+            for (int n = 0; n < frequenceLoco; n++) {
+                choix.add(CouleurWagon.LOCOMOTIVE);
+            }
+        }
+        return choix;
     }
 }
 

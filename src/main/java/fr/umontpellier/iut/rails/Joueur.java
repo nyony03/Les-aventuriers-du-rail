@@ -319,7 +319,9 @@ public class Joueur {
         }
         for (Route route : routePossible) {
             if (choix.equals(route.getNom())) {
+                choisirCarteRoute(route);
                 route.setProprietaire(this);
+                scoreJoueur(route.getLongueur());
             }
         }
         for (Ville ville : garePossible) {
@@ -328,14 +330,13 @@ public class Joueur {
                 ville.setProprietaire(this);
                 nbGares -= 1;
                 score -= 4;
-                for (CouleurWagon carte : cartesWagonPosees) {
-                    jeu.defausserCarteWagon(carte);
-                    cartesWagon.remove(carte);
-                }
-                cartesWagonPosees.clear();
             }
         }
-
+        for (CouleurWagon carte : cartesWagonPosees) {
+            jeu.defausserCarteWagon(carte);
+            cartesWagon.remove(carte);
+        }
+        cartesWagonPosees.clear();
     }
 
     public int nbCartesLocomotives() {
@@ -375,11 +376,11 @@ public class Joueur {
         while (i < n) {                                                                   //tant que i est inférieur au nombre de cartes à choisir (n en parametre)
             choix = choisir("Choisir " + n + " carte à utiliser  : ", choixInteractif, choixBouton, false);
             i++;
-            for (int h = 0; h<cartesWagonPossibles.size()-1; h++) {                  //pour toutes les cartes possibles
-                String nomCarteWagon = "" + cartesWagonPossibles.get(h);                             //on les ajoute dans l'attribut carte wagon posée
+            for (int h = 0; h < cartesWagonPossibles.size() - 1; h++) {                  //pour toutes les cartes possibles
+                String nomCarteWagon = "" + cartesWagonPossibles.get(h);                 //on les ajoute dans l'attribut carte wagon posée
                 if (nomCarteWagon.equals(choix)) {
                     cartesWagonPosees.add(cartesWagonPossibles.get(h));
-                    h=cartesWagonPossibles.size();
+                    h = cartesWagonPossibles.size();
                 }
             }
             int occurence = Collections.frequency(choixBouton, choix);
@@ -397,5 +398,39 @@ public class Joueur {
                 choixBouton.remove("LOCOMOTIVE");
             }
         }
+    }
+
+    public void choisirCarteRoute(Route route) {
+        ArrayList<CouleurWagon> choix = route.utilisationRoute(this);
+        if (choix.isEmpty()) {
+            for (int i = 0; i < route.getLongueur(); i++) {
+                cartesWagonPosees.add(route.getCouleur());
+                cartesWagon.remove(route.getCouleur());
+            }
+        } else {
+            choisirCarteWagon(choix, route.getLongueur());
+        }
+    }
+
+    public void scoreJoueur(int nbWagon) {
+        if (nbWagon == 1) {
+            score += 1;
+        }
+        if (nbWagon == 2) {
+            score += 2;
+        }
+        if (nbWagon == 3) {
+            score += 4;
+        }
+        if (nbWagon == 4) {
+            score += 7;
+        }
+        if (nbWagon == 6) {
+            score += 15;
+        }
+        if (nbWagon == 8) {
+            score += 21;
+        }
+
     }
 }

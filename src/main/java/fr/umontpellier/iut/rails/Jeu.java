@@ -189,45 +189,50 @@ public class Jeu implements Runnable {
             }
             pileDestinations.addAll(joueur.choisirDestinations(choixDestinations, 2));
         }
-        joueurCourant = joueurs.get(0);
-        joueurCourant.jouerTour();
+
+
 
 
 
         // Exemple d'utilisation
         while (joueurCourant.getNbWagons() > 2) {
-            // le joueur doit choisir une valeur parmi "1", "2", "3", "4", "6" ou "8"
-            // les choix possibles sont présentés sous forme de boutons cliquables
-            String choix = joueurCourant.choisir(
-                    "Choisissez une taille de route.", // instruction
-                    new ArrayList<>(), // choix (hors boutons, ici aucun)
-                    new ArrayList<>(Arrays.asList("1", "2", "3", "4", "6", "8")), // boutons
-                    false); // le joueur ne peut pas passer (il doit faire un choix)
+            for(Joueur joueur : joueurs){
+                joueurCourant = joueur;
+                joueurCourant.jouerTour();
 
-            // une fois la longueur choisie, on filtre les routes pour ne garder que les
-            // routes de la longueur choisie
-            int longueurRoute = Integer.parseInt(choix);
-            ArrayList<String> routesPossibles = new ArrayList<>();
-            for (Route route : routes) {
-                if (route.getLongueur() == longueurRoute) {
-                    routesPossibles.add(route.getNom());
-                }
             }
-
-            // le joueur doit maintenant choisir une route de la longueur choisie (les
-            // autres ne sont pas acceptées). Le joueur peut choisir de passer (aucun choix)
-            String choixRoute = joueurCourant.choisir(
-                    "Choisissez une route de longueur " + longueurRoute, // instruction
-                    routesPossibles, // choix (pas des boutons, il faut cliquer sur la carte)
-                    new ArrayList<>(), // boutons (ici aucun bouton créé)
-                    true); // le joueur peut passer sans faire de choix
-            if (choixRoute.equals("")) {
-                // le joueur n'a pas fait de choix (cliqué sur le bouton "passer")
-                log("Auncune route n'a été choisie");
-            } else {
-                // le joueur a choisi une route
-                log("Vous avez choisi la route " + choixRoute);
-            }
+//            // le joueur doit choisir une valeur parmi "1", "2", "3", "4", "6" ou "8"
+//            // les choix possibles sont présentés sous forme de boutons cliquables
+//            String choix = joueurCourant.choisir(
+//                    "Choisissez une taille de route.", // instruction
+//                    new ArrayList<>(), // choix (hors boutons, ici aucun)
+//                    new ArrayList<>(Arrays.asList("1", "2", "3", "4", "6", "8")), // boutons
+//                    false); // le joueur ne peut pas passer (il doit faire un choix)
+//
+//            // une fois la longueur choisie, on filtre les routes pour ne garder que les
+//            // routes de la longueur choisie
+//            int longueurRoute = Integer.parseInt(choix);
+//            ArrayList<String> routesPossibles = new ArrayList<>();
+//            for (Route route : routes) {
+//                if (route.getLongueur() == longueurRoute) {
+//                    routesPossibles.add(route.getNom());
+//                }
+//            }
+//
+//            // le joueur doit maintenant choisir une route de la longueur choisie (les
+//            // autres ne sont pas acceptées). Le joueur peut choisir de passer (aucun choix)
+//            String choixRoute = joueurCourant.choisir(
+//                    "Choisissez une route de longueur " + longueurRoute, // instruction
+//                    routesPossibles, // choix (pas des boutons, il faut cliquer sur la carte)
+//                    new ArrayList<>(), // boutons (ici aucun bouton créé)
+//                    true); // le joueur peut passer sans faire de choix
+//            if (choixRoute.equals("")) {
+//                // le joueur n'a pas fait de choix (cliqué sur le bouton "passer")
+//                log("Auncune route n'a été choisie");
+//            } else {
+//                // le joueur a choisi une route
+//                log("Vous avez choisi la route " + choixRoute);
+//            }
         }
     }
 

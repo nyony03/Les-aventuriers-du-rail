@@ -14,42 +14,42 @@ public class Tunnel extends Route {
     }
 
     @Override
-    public void utilisationRoute(Joueur j) {
+    public String utilisationRoute(Joueur j) {
         super.utilisationRoute(j);
         ArrayList<CouleurWagon> cartesPiochees = new ArrayList<>();
-        for(int i = 0; i<3; i++){
+        for (int i = 0; i < 3; i++) {
             cartesPiochees.add(j.getJeu().piocherCarteWagon());
         }
-        int nbMemeCouleur = 0;
-        for(CouleurWagon carte: cartesPiochees){
-            if(j.getCartesWagonPosees().contains(carte) || cartesPiochees.contains(CouleurWagon.LOCOMOTIVE)){
-                nbMemeCouleur++;
-            }
-        }
-        if(nbMemeCouleur>0){
-            String choix = ".";
-            boolean aCarte = false;
-            ArrayList<CouleurWagon> cartePossible = new ArrayList<>();
-            for(CouleurWagon carte : j.getCartesWagonPosees()){
-                for (int h = 0; h<nbMemeCouleur && !aCarte; h++){
-                    if(j.getCartesWagon().contains(carte) || j.getCartesWagon().contains(CouleurWagon.LOCOMOTIVE)){
-                        aCarte = true;
+        boolean aCarte = false;
+        String choix = ".";
+        ArrayList<CouleurWagon> cartePossible = new ArrayList<>();
+        ArrayList<CouleurWagon> carteEnMain = new ArrayList<>();
+        carteEnMain.addAll(j.getCartesWagon());
+
+        for (CouleurWagon carte : cartesPiochees) {
+            if (carteEnMain.contains(carte) || cartesPiochees.contains(CouleurWagon.LOCOMOTIVE)) {
+                if (j.nbCartesCouleur(carte)>0){
+                    if(carte.equals(CouleurWagon.LOCOMOTIVE)) {
+
+                    } else {
                         cartePossible.add(carte);
+                        carteEnMain.remove(carte);
                     }
                 }
             }
-            if (aCarte){
-                ArrayList<String> bouton = new ArrayList<>();
-                bouton.add("oui");
-                choix = j.choisir("Souhaitez-vous toujours prendre le tunnel ?", new ArrayList<String>(), bouton, true);
-                if (choix.equals("oui")){
-                    j.choisirCarteWagon(cartePossible, nbMemeCouleur);
-                }else{
-                    j.getCartesWagon().addAll(j.getCartesWagonPosees());
-                    j.getCartesWagonPosees().clear();
-                }
-
-            }
         }
+//        if (aCarte) {
+//            ArrayList<String> bouton = new ArrayList<>();
+//            bouton.add("oui");
+//            choix = j.choisir("Souhaitez-vous toujours prendre le tunnel ?", new ArrayList<String>(), bouton, true);
+//            if (choix.equals("oui")) {
+//                j.choisirCarteWagon(cartePossible, nbMemeCouleur);
+//            } else {
+//                j.getCartesWagon().addAll(j.getCartesWagonPosees());
+//                j.getCartesWagonPosees().clear();
+//            }
+//
+//        }
+        return null;
     }
 }

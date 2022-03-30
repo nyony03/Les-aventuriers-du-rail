@@ -187,11 +187,8 @@ public class Jeu implements Runnable {
             for (int i = 0; i < 3; i++) {
                 choixDestinations.add(pileDestinations.remove(0));
             }
-            pileDestinations.addAll(joueur.choisirDestinations(choixDestinations, 2));
+            joueur.choisirDestinations(choixDestinations, 2);
         }
-
-
-
 
 
         // Exemple d'utilisation
@@ -199,8 +196,8 @@ public class Jeu implements Runnable {
             for(Joueur joueur : joueurs){
                 joueurCourant = joueur;
                 joueurCourant.jouerTour();
-
             }
+
 //            // le joueur doit choisir une valeur parmi "1", "2", "3", "4", "6" ou "8"
 //            // les choix possibles sont présentés sous forme de boutons cliquables
 //            String choix = joueurCourant.choisir(

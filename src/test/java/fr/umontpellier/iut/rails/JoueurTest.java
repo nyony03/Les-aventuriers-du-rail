@@ -54,7 +54,7 @@ public class JoueurTest {
         assertTrue(joueur1.getDestinations().contains(d4));
     }
 
-    @Disabled
+
     @Test
     void testJouerTourPrendreCartesWagon() {
         jeu.setInput("GRIS", "ROUGE");
@@ -77,6 +77,7 @@ public class JoueurTest {
         joueur1.jouerTour();
         // le joueur devrait piocher la LOCOMOTIVE, prendre une carte ROUGE
         // puis le jeu devrait remettre une carte visible BLEU
+        System.out.println(joueur1.getCartesWagon());
 
         assertTrue(TestUtils.contientExactement(
             joueur1.getCartesWagon(),

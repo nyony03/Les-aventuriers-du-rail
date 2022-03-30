@@ -284,7 +284,7 @@ public class Joueur {
         ArrayList<Ville> garePossible = new ArrayList<>();
         ArrayList<Route> routePossible = new ArrayList<>();
         for (CouleurWagon couleurWagon : jeu.getCartesWagonVisibles()) {
-            choixInteractif.add("" + couleurWagon);
+            choixInteractif.add("" + couleurWagon.name());
         }
         choixInteractif.add("GRIS");
         choixInteractif.add("destinations");
@@ -307,16 +307,70 @@ public class Joueur {
         boolean peutPasser = true;
         choix = choisir(getNom() + ", choisis parmi les propositions suivante :", choixInteractif, choixBouton, peutPasser);
 
-        if (choix.equals("GRIS")) {
+        if(!choix.equals("GRIS")){
+            for(CouleurWagon carte : CouleurWagon.getCouleursSimples()){
+                if(choix.equals(carte.name())){
+                    cartesWagon.add(carte);
+                    jeu.retirerCarteWagonVisible(carte);
+                }
+                for (CouleurWagon carteVisible : jeu.getCartesWagonVisibles()) {
+                    if(!carte.equals(CouleurWagon.LOCOMOTIVE)){
+                        choixInteractif.add(carteVisible.name());
+                    }
+                }
+                choixInteractif.add("GRIS");
+                choixBouton.addAll(choixInteractif);
+                choix = choisir(getNom() + ", choisis parmi les propositions suivante :", choixInteractif, choixBouton, peutPasser);
+                if (choix.equals("GRIS")) {
+                    cartesWagon.add(jeu.piocherCarteWagon());
+                } else {
+                    for(CouleurWagon couleurCarte : CouleurWagon.getCouleursSimples()){
+                        if(choix.equals(couleurCarte.name())){
+                            cartesWagon.add(couleurCarte);
+                            jeu.retirerCarteWagonVisible(couleurCarte);
+                        }
+                    }
+                }
+            }
+        }
+
+        if( choix.equals("LOCOMOTIVE")){
+            jeu.retirerCarteWagonVisible(CouleurWagon.LOCOMOTIVE);
+            cartesWagon.add(CouleurWagon.LOCOMOTIVE);
+        }
+        if (choix.equals("GRIS")) { // A REFAIRE
             cartesWagon.add(jeu.piocherCarteWagon());
-            cartesWagon.add(jeu.piocherCarteWagon());
-        } else if (choix.equals("destinations")) {
+            choixInteractif.clear();
+            choixBouton.clear();
+            for (CouleurWagon carte : jeu.getCartesWagonVisibles()) {
+                if(!carte.equals(CouleurWagon.LOCOMOTIVE)){
+                    choixInteractif.add(carte.name());
+                }
+            }
+            choixInteractif.add("GRIS");
+            choixBouton.addAll(choixInteractif);
+            choix = choisir(getNom() + ", choisis parmi les propositions suivante :", choixInteractif, choixBouton, peutPasser);
+            if( choix.equals("LOCOMOTIVE")){
+                jeu.retirerCarteWagonVisible(CouleurWagon.LOCOMOTIVE);
+                cartesWagon.add(CouleurWagon.LOCOMOTIVE);
+            }else{
+                for(CouleurWagon carte : CouleurWagon.getCouleursSimples()){
+                    if(choix.equals(carte.name())){
+                        cartesWagon.add(carte);
+                        jeu.retirerCarteWagonVisible(carte);
+                    }
+                }
+            }
+        }
+
+        if (choix.equals("destinations")) {
             ArrayList<Destination> destinationsPiochees = new ArrayList<>();
             while (destinationsPiochees.size() <= 3) {
                 destinationsPiochees.add(jeu.piocherDestination());
             }
-            choisirDestinations(destinationsPiochees, 1);
+            jeu.getPileDestinations().addAll( jeu.getPileDestinations().size()-1, choisirDestinations(destinationsPiochees, 1));
         }
+
         for (Route route : routePossible) {
             if (choix.equals(route.getNom())) {
                 route.utilisationRoute(this);
@@ -324,6 +378,7 @@ public class Joueur {
                 scoreJoueur(route.getLongueur());
             }
         }
+
         for (Ville ville : garePossible) {
             if (choix.equals(ville.getNom())) {
                 choisirCarteWagon(cartesWagon, 4 - nbGares);
@@ -332,6 +387,7 @@ public class Joueur {
                 score -= 4;
             }
         }
+
         for (CouleurWagon carte : cartesWagonPosees) {
             jeu.defausserCarteWagon(carte);
             cartesWagon.remove(carte);
@@ -339,14 +395,16 @@ public class Joueur {
         cartesWagonPosees.clear();
     }
 
-    public int nbCartesLocomotives() {
-        int nbLocomotive = 0;
+
+
+    public int nbCartesCouleur(CouleurWagon couleur) {
+        int nbCartesCouleur = 0;
         for (CouleurWagon carteWagon : cartesWagon) {
-            if (carteWagon.equals(CouleurWagon.LOCOMOTIVE)) {
-                nbLocomotive++;
+            if (carteWagon.equals(couleur)) {
+                nbCartesCouleur++;
             }
         }
-        return nbLocomotive;
+        return nbCartesCouleur;
     }
 
     public int nbMaxCarteSimilaire() {
@@ -365,7 +423,10 @@ public class Joueur {
         return nbMaxCarteSimilaire;
     }
 
-    public void choisirCarteWagon(List<CouleurWagon> cartesWagonPossibles, int n) {
+
+
+    public String choisirCarteWagon(List<CouleurWagon> cartesWagonPossibles, int n) {
+        String couleurChoisi = "";
         ArrayList<String> choixBouton = new ArrayList<>();
         for (CouleurWagon carteWagon : cartesWagonPossibles) {                      //création de la liste de choix avec les cartes wagons mis en parametre
             choixBouton.add(carteWagon.toString());
@@ -377,7 +438,7 @@ public class Joueur {
             choix = choisir("Choisir " + n + " carte à utiliser  : ", choixInteractif, choixBouton, false);
             i++;
             for (int h = 0; h < cartesWagonPossibles.size() - 1; h++) {                  //pour toutes les cartes possibles
-                String nomCarteWagon = "" + cartesWagonPossibles.get(h);                 //on les ajoute dans l'attribut carte wagon posée
+                String nomCarteWagon = cartesWagonPossibles.get(h).name();                 //on les ajoute dans l'attribut carte wagon posée
                 if (nomCarteWagon.equals(choix)) {
                     cartesWagonPosees.add(cartesWagonPossibles.get(h));
                     h = cartesWagonPossibles.size();
@@ -385,6 +446,7 @@ public class Joueur {
             }
             int occurence = Collections.frequency(choixBouton, choix);
             if (!choix.equals("LOCOMOTIVE")) {                                       //on determine quelles cartes il est possible de proposer au joueur
+                couleurChoisi = choix;
                 ArrayList<String> cartesGardees = new ArrayList<>();                //pour le choix de ses prochaines cartes compte tenu de son premier choix
                 for (int j = 0; j < occurence - 1; j++) {
                     cartesGardees.add(choix);
@@ -394,10 +456,13 @@ public class Joueur {
                     cartesGardees.add("LOCOMOTIVE");
                 }
                 choixBouton.retainAll(cartesGardees);
+                choixInteractif.retainAll(cartesGardees);
             } else {
                 choixBouton.remove("LOCOMOTIVE");
+                choixInteractif.remove("LOCOMOTIVE");
             }
         }
+        return couleurChoisi;
     }
 
     public void scoreJoueur(int nbWagon) {

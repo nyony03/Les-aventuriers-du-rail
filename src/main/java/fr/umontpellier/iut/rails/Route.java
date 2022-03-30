@@ -110,7 +110,7 @@ public class Route {
         return (j.getCartesWagon().contains(getCouleur()) && getLongueur() <= nbCouleur);
     }
 
-    public void utilisationRoute(Joueur j) {
+    public String utilisationRoute(Joueur j) {
         ArrayList<CouleurWagon> choix = new ArrayList<>();
         if (couleur.equals(CouleurWagon.GRIS)) {
             int frequenceLoco = Collections.frequency(j.getCartesWagon(), CouleurWagon.LOCOMOTIVE);
@@ -132,8 +132,9 @@ public class Route {
                 j.getCartesWagon().remove(couleur);
             }
         } else {
-            j.choisirCarteWagon(choix, longueur);
+            return j.choisirCarteWagon(choix, longueur);
         }
+        return null;
     }
 }
 

@@ -16,7 +16,7 @@ public class Ferry extends Route {
 
     @Override
     public boolean nbCarteRequis(Joueur j) {
-        return super.nbCarteRequis(j) && j.nbCartesLocomotives() >= nbLocomotives;
+        return super.nbCarteRequis(j) && j.nbCartesCouleur(CouleurWagon.LOCOMOTIVE) >= nbLocomotives;
     }
 
     @Override
@@ -26,7 +26,7 @@ public class Ferry extends Route {
     }
 
     @Override
-    public void utilisationRoute(Joueur j) {
+    public String utilisationRoute(Joueur j) {
         ArrayList<CouleurWagon> choix = new ArrayList<>();
         for(int i = 0; i < nbLocomotives; i++){
             j.getCartesWagonPosees().add(CouleurWagon.LOCOMOTIVE);
@@ -41,6 +41,7 @@ public class Ferry extends Route {
             }
         }
         j.choisirCarteWagon(choix, getLongueur()-nbLocomotives);
+    return null;
     }
 
 }

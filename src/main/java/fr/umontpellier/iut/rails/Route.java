@@ -32,6 +32,12 @@ public class Route {
      */
     private String nom;
 
+    private String couleurChoisi;
+
+    public String getCouleurChoisi() {
+        return couleurChoisi;
+    }
+
     public Route(Ville ville1, Ville ville2, int longueur, CouleurWagon couleur) {
         this.ville1 = ville1;
         this.ville2 = ville2;
@@ -110,9 +116,11 @@ public class Route {
         return (j.getCartesWagon().contains(getCouleur()) && getLongueur() <= nbCouleur);
     }
 
-    public String utilisationRoute(Joueur j) {
+    public boolean utilisationRoute(Joueur j) {
+        boolean peutPasser = true;
         ArrayList<CouleurWagon> choix = new ArrayList<>();
         if (couleur.equals(CouleurWagon.GRIS)) {
+            couleurChoisi = couleur.name();
             int frequenceLoco = Collections.frequency(j.getCartesWagon(), CouleurWagon.LOCOMOTIVE);
             for (CouleurWagon couleurCarte : CouleurWagon.getCouleursSimples()) {
                 int frequenceCouleur = Collections.frequency(j.getCartesWagon(), couleurCarte);
@@ -132,9 +140,11 @@ public class Route {
                 j.getCartesWagon().remove(couleur);
             }
         } else {
-            return j.choisirCarteWagon(choix, longueur);
+            couleurChoisi = j.choisirCarteWagon(choix, longueur);
         }
-        return null;
+
+        return peutPasser;
     }
+
 }
 

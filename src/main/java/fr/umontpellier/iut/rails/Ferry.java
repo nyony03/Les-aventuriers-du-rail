@@ -26,7 +26,8 @@ public class Ferry extends Route {
     }
 
     @Override
-    public String utilisationRoute(Joueur j) {
+    public boolean utilisationRoute(Joueur j) {
+        boolean peutPasser = true;
         ArrayList<CouleurWagon> choix = new ArrayList<>();
         for(int i = 0; i < nbLocomotives; i++){
             j.getCartesWagonPosees().add(CouleurWagon.LOCOMOTIVE);
@@ -41,7 +42,7 @@ public class Ferry extends Route {
             }
         }
         j.choisirCarteWagon(choix, getLongueur()-nbLocomotives);
-    return null;
+        return peutPasser;
     }
 
 }

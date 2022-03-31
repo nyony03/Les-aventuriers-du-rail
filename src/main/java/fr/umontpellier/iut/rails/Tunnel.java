@@ -42,6 +42,7 @@ public class Tunnel extends Route {
             nbCouleurEtLoco += Collections.frequency(j.getCartesWagon(), CouleurWagon.StringToObject(getCouleurChoisi()));
         }
         if(nbCouleurEtLoco >= nbCarteSupplementaire){
+                // A REMPLIR
                 // On lui laisse le choix de choisir de passer ou de mettre les cartes nbCouleur+loco dans carteWagon posé
             peutPasser = true;
 

@@ -187,7 +187,7 @@ public class Jeu implements Runnable {
             for (int i = 0; i < 3; i++) {
                 choixDestinations.add(pileDestinations.remove(0));
             }
-            joueur.choisirDestinations(choixDestinations, 2);
+           // joueur.choisirDestinations(choixDestinations, 2);
         }
 
 
@@ -276,13 +276,14 @@ public class Jeu implements Runnable {
      * (remise à 5, éventuellement remélangée si 3 locomotives visibles)
      */
     public void retirerCarteWagonVisible(CouleurWagon c) {
+        System.out.println("ici");
         cartesWagonVisibles.remove(c);
         int locomotive = 0;
         while (cartesWagonVisibles.size() < 5){
+            if(pileCartesWagon.get(0) == CouleurWagon.LOCOMOTIVE){
+            locomotive++;
+        }
             cartesWagonVisibles.add(pileCartesWagon.remove(0));
-            if(pileCartesWagon.get(pileCartesWagon.size()-1) == CouleurWagon.LOCOMOTIVE){
-                locomotive++;
-            }
             if(locomotive == 3){
                 cartesWagonVisibles.removeAll(defausseCartesWagon);
             }

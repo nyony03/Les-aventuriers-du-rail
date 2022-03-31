@@ -307,79 +307,20 @@ public class Joueur {
         String choix = ".";
         boolean peutPasser = true;
         choix = choisir(getNom() + ", choisis parmi les propositions suivante :", choixInteractif, choixBouton, peutPasser);
-
+        System.out.println(choix);
         //Le joueur va choisir entre piocher carteWagon / choisir une route /choisir une destination / construire une gare
 
         //choix = piocher
-        //choix = piocher carteWagon pas loco dans carteWagon visible
-        if (!choix.equals("GRIS")) {
-            for (CouleurWagon carte : CouleurWagon.getCouleursSimples()) {
-                if (choix.equals(carte.name())) {
-                    cartesWagon.add(carte);
-                    jeu.retirerCarteWagonVisible(carte);
-                }
-                for (CouleurWagon carteVisible : jeu.getCartesWagonVisibles()) {
-                    if (!carte.equals(CouleurWagon.LOCOMOTIVE)) {
-                        choixInteractif.add(carteVisible.name());
-                    }
-                }
-                choixInteractif.add("GRIS");
-                choixBouton.addAll(choixInteractif);
-                choix = choisir(getNom() + ", choisis parmi les propositions suivante :", choixInteractif, choixBouton, peutPasser);
-                if (choix.equals("GRIS")) {
-                    cartesWagon.add(jeu.piocherCarteWagon());
-                } else {
-                    for (CouleurWagon couleurCarte : CouleurWagon.getCouleursSimples()) {
-                        if (choix.equals(couleurCarte.name())) {
-                            cartesWagon.add(couleurCarte);
-                            jeu.retirerCarteWagonVisible(couleurCarte);
-                        }
-                    }
-                }
+        //choix1 = piocher carteWagon pas loco dans carteWagon visible
+        //choix2 = choisir de piocher dans GRIS ou de piocher carteWagonvisible une
+        boolean choixEstRoute = false;
+        for(CouleurWagon carteVisible : jeu.getCartesWagonVisibles()){
+            if(carteVisible.name().equals(choix) || choix.equals("GRIS")){
+                choixEstRoute = true;
             }
         }
-        //Si le choix est de pioché une locomotive dans la carte Wagon visible
-        if (choix.equals("LOCOMOTIVE")) {
-            jeu.retirerCarteWagonVisible(CouleurWagon.LOCOMOTIVE);
-            cartesWagon.add(CouleurWagon.LOCOMOTIVE);
-
-        }
-
-        //si le choix est de piocher des cartes dans la pileCarteWagon
-        if (choix.equals("GRIS")) { // A REFAIRE
-            cartesWagon.add(jeu.piocherCarteWagon());
-            choixInteractif.clear();
-            choixBouton.clear();
-
-            //il a le choix de piocher encore de la pile GRIS ou il choisit de piocher dans carteVagonVisible
-            String choix2 = "";
-            choix2 = choisir(getNom() + ", choisis entre piocher dans la pile ou prendre une carte visible", choixInteractif, choixBouton, peutPasser);
-            if (choix2.equals("GRIS")) {
-                cartesWagon.add(jeu.piocherCarteWagon());
-            } else {
-                for (CouleurWagon carte : jeu.getCartesWagonVisibles()) {
-                    if (!carte.equals(CouleurWagon.LOCOMOTIVE)) {
-                        choixInteractif.add(carte.name());
-                        cartesWagon.add(carte);
-                        jeu.retirerCarteWagonVisible(carte);
-                    }
-                }
-            }
-
-//            choixInteractif.add("GRIS");
-//            choixBouton.addAll(choixInteractif);
-//            choix = choisir(getNom() + ", choisis parmi les propositions suivante :", choixInteractif, choixBouton, peutPasser);
-//            if( choix.equals("LOCOMOTIVE")){
-//                jeu.retirerCarteWagonVisible(CouleurWagon.LOCOMOTIVE);
-//                cartesWagon.add(CouleurWagon.LOCOMOTIVE);
-//            }else{
-//                for(CouleurWagon carte : CouleurWagon.getCouleursSimples()){
-//                    if(choix.equals(carte.name())){
-//                        cartesWagon.add(carte);
-//                        jeu.retirerCarteWagonVisible(carte);
-//                    }
-//                }
-//            }
+        if(choixEstRoute){
+            piocherCarteWagonVisible(choix);
         }
 
         //si le choix est pioché une carte dans la pile destinations
@@ -491,6 +432,50 @@ public class Joueur {
             couleurChoisi = "LOCOMOTIVE";
         }
         return couleurChoisi;
+    }
+
+    public void piocherCarteWagonVisible(String choix) {
+        ArrayList<String> choixBouton = new ArrayList<>();
+        ArrayList<String> choixInteractif = new ArrayList<>();
+        int i = 0;
+
+        while (i < 2) {                                                                   //tant que i est inférieur au nombre de cartes à choisir (n en parametre)
+            i++;
+            if (choix.equals("LOCOMOTIVE")) {
+                System.out.println("ok");
+                jeu.retirerCarteWagonVisible(CouleurWagon.LOCOMOTIVE);
+                cartesWagon.add(CouleurWagon.LOCOMOTIVE);
+                i = 2;
+            }
+            else {
+                if (choix.equals("GRIS")) {
+                    //Si c'est gris, il pioche et il a le choix entre repioché dans GRIS ou pioché dans carteWagon visible sauf loco
+                    cartesWagon.add(jeu.piocherCarteWagon());
+
+                } else {
+                    //Si il prend une carte visible donc il prend la carte dans sa main et la carte est remplacé par la premiere de la pile
+
+                    boolean couleurTrouvee = false;
+                    CouleurWagon couleur = null;
+                    for (CouleurWagon carteVisible : jeu.getCartesWagonVisibles()) {
+                        if (!carteVisible.equals(CouleurWagon.LOCOMOTIVE) && !couleurTrouvee) {
+                            choixBouton.add(carteVisible.name());
+                            couleurTrouvee = true;
+                            couleur = carteVisible;
+                        }
+                    }
+                    jeu.retirerCarteWagonVisible(couleur);
+                }
+                for (CouleurWagon carteVisible : jeu.getCartesWagonVisibles()) {
+                    if (carteVisible.name().equals(choix)) {
+                        choixBouton.add(carteVisible.name());
+                    }
+                }
+                choixBouton.add("GRIS");
+                choixInteractif.retainAll(choixBouton);
+                choix = choisir("Choisir une carte à utiliser  : ", choixInteractif, choixBouton, false);
+            }
+        }
     }
 
     public void scoreJoueur(int nbWagon) {

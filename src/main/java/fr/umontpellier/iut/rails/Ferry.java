@@ -26,23 +26,22 @@ public class Ferry extends Route {
     }
 
     @Override
-    public boolean utilisationRoute(Joueur j) {
-        boolean peutPasser = true;
+    public int utilisationRoute(Joueur j) {
         ArrayList<CouleurWagon> choix = new ArrayList<>();
         for(int i = 0; i < nbLocomotives; i++){
             j.getCartesWagonPosees().add(CouleurWagon.LOCOMOTIVE);
             j.getCartesWagon().remove(CouleurWagon.LOCOMOTIVE);
         }
-        for(CouleurWagon couleurExistante : CouleurWagon.getCouleursSimples()){
-            int frequence = Collections.frequency(j.getCartesWagon(), couleurExistante);
+        for(CouleurWagon couleurCarte : j.getCartesWagon()){
+            int frequence = Collections.frequency(j.getCartesWagon(), couleurCarte);
             if( frequence >= (getLongueur()-nbLocomotives)){
                 for(int f = 0; f < frequence; f++){
-                    choix.add(couleurExistante);
+                    choix.add(couleurCarte);
                 }
             }
         }
-        j.choisirCarteWagon(choix, getLongueur()-nbLocomotives);
-        return peutPasser;
+        j.choisirCarteWagon(choix, getLongueur()-nbLocomotives, true);
+        return 0;
     }
 
 }

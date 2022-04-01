@@ -96,6 +96,7 @@ public class Jeu implements Runnable {
             pileCartesWagon.add(CouleurWagon.ORANGE);
             pileCartesWagon.add(CouleurWagon.NOIR);
             pileCartesWagon.add(CouleurWagon.VERT);
+            pileCartesWagon.add(CouleurWagon.JAUNE);
         }
         Collections.shuffle(pileCartesWagon);
         for (Joueur joueur : joueurs) {
@@ -188,7 +189,7 @@ public class Jeu implements Runnable {
             for (int i = 0; i < 3; i++) {
                 choixDestinations.add(pileDestinations.remove(0));
             }
-           // joueur.choisirDestinations(choixDestinations, 2);
+            //joueur.choisirDestinations(choixDestinations, 2);
         }
 
 

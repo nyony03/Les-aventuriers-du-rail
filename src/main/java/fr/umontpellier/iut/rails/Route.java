@@ -116,12 +116,11 @@ public class Route {
         return (j.getCartesWagon().contains(getCouleur()) && getLongueur() <= nbCouleur);
     }
 
-    public boolean utilisationRoute(Joueur j) {
-        boolean peutPasser = true;
+    public int utilisationRoute(Joueur j) {
         ArrayList<CouleurWagon> choix = new ArrayList<>();
+        int frequenceLoco = Collections.frequency(j.getCartesWagon(), CouleurWagon.LOCOMOTIVE);
         if (couleur.equals(CouleurWagon.GRIS)) {
             couleurChoisi = couleur.name();
-            int frequenceLoco = Collections.frequency(j.getCartesWagon(), CouleurWagon.LOCOMOTIVE);
             for (CouleurWagon couleurCarte : CouleurWagon.getCouleursSimples()) {
                 int frequenceCouleur = Collections.frequency(j.getCartesWagon(), couleurCarte);
                 if (frequenceCouleur + frequenceLoco >= (getLongueur())) {
@@ -130,20 +129,16 @@ public class Route {
                     }
                 }
             }
-            for (int n = 0; n < frequenceLoco; n++) {
-                choix.add(CouleurWagon.LOCOMOTIVE);
-            }
-        }
-        if (choix.isEmpty()) {
-            for (int i = 0; i < longueur; i++) {
-                j.getCartesWagonPosees().add(couleur);
-                j.getCartesWagon().remove(couleur);
-            }
         } else {
-            couleurChoisi = j.choisirCarteWagon(choix, longueur);
+            for(int i = 0; i<Collections.frequency(j.getCartesWagon(), couleur); i++){
+                choix.add(couleur);
+            }
         }
-
-        return peutPasser;
+        for (int n = 0; n < frequenceLoco; n++) {
+            choix.add(CouleurWagon.LOCOMOTIVE);
+        }
+        couleurChoisi = j.choisirCarteWagon(choix, longueur, true);
+        return 0;
     }
 
 }

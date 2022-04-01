@@ -242,17 +242,17 @@ public class Joueur {
      */
     public List<Destination> choisirDestinations(List<Destination> destinationsPossibles, int n) {
         ArrayList<String> bouton = new ArrayList<>();
-        for (int i = 0; i < 4; i++) {
-            bouton.add(destinationsPossibles.get(i).toString());
+        for (Destination destinationsPossible : destinationsPossibles) {
+            bouton.add(destinationsPossible.toString());
         }
         boolean peutPasser = true;
 
-        int i = 0;
+        int i = destinationsPossibles.size();
         String choix = ".";
         List<Destination> nonChoisi = new ArrayList<>();
-        while (!choix.isEmpty() && i < n) {
+        while (!choix.isEmpty() && i > n) {
             choix = choisir("Défausser jusqu'à 2 cartes : ", new ArrayList<>(), bouton, peutPasser);
-            i++;
+            i--;
             for (Destination destination : destinationsPossibles) {
                 if (destination.getNom().equals(choix)) {
                     nonChoisi.add(destination);
@@ -330,29 +330,43 @@ public class Joueur {
         //si le choix est pioché une carte dans la pile destinations
         if (choix.equals("destinations")) {
             ArrayList<Destination> destinationsPiochees = new ArrayList<>();
-            while (destinationsPiochees.size() <= 3) {
+            for(Destination desti : jeu.getPileDestinations()){
+                System.out.println(desti);
+            }
+            while (destinationsPiochees.size() <= 2) {
                 destinationsPiochees.add(jeu.piocherDestination());
             }
-            jeu.getPileDestinations().addAll(jeu.getPileDestinations().size() - 1, choisirDestinations(destinationsPiochees, 1));
+
+
+            jeu.getPileDestinations().addAll(jeu.getPileDestinations().size(), choisirDestinations(destinationsPiochees, 1));
+            for(Destination desti : jeu.getPileDestinations()){
+                System.out.println(desti);
+            }
         }
 
         //si choix = choisir une route
         for (Route route : routePossible) {
             if (choix.equals(route.getNom())) {
-                boolean routeUtilise = route.utilisationRoute(this);
-                //si la route peut être passer
-                if (routeUtilise) {
-                    route.utilisationRoute(this);
-                    route.setProprietaire(this);
-                    scoreJoueur(route.getLongueur());
+                int nbCarteRajout = route.utilisationRoute(this);
+                //si la route est un tunnel et qu'il a les cartes supplémentaires à jouer
+                if (nbCarteRajout>0) {
+                    ArrayList<CouleurWagon> carteChoix = new ArrayList<>();
+                    for(CouleurWagon carte : cartesWagon){
+                        if(route.getCouleurChoisi().equals(carte.name()) || carte.equals(CouleurWagon.LOCOMOTIVE)){
+                            carteChoix.add(carte);
+                        }
+                    }
+                    choisirCarteWagon(carteChoix, nbCarteRajout, true);
                 }
+                route.setProprietaire(this);
+                scoreJoueur(route.getLongueur());
             }
         }
 
         //si choix = construire une gare
         for (Ville ville : garePossible) {
             if (choix.equals(ville.getNom())) {
-                choisirCarteWagon(cartesWagon, 4 - nbGares);
+                choisirCarteWagon(cartesWagon, 4 - nbGares, true);
                 ville.setProprietaire(this);
                 nbGares -= 1;
                 score -= 4;
@@ -361,7 +375,7 @@ public class Joueur {
 
         for (CouleurWagon carte : cartesWagonPosees) {
             jeu.defausserCarteWagon(carte);
-            cartesWagon.remove(carte);
+//            cartesWagon.remove(carte);
         }
         cartesWagonPosees.clear();
     }
@@ -395,22 +409,24 @@ public class Joueur {
     }
 
 
-    public String choisirCarteWagon(List<CouleurWagon> cartesWagonPossibles, int n) {
+    public String choisirCarteWagon(List<CouleurWagon> cartesWagonPossibles, int n, boolean peutPasser) {
         String couleurChoisi = "";
         ArrayList<String> choixBouton = new ArrayList<>();
         for (CouleurWagon carteWagon : cartesWagonPossibles) {                      //création de la liste de choix avec les cartes wagons mis en parametre
-            choixBouton.add(carteWagon.toString());
+            choixBouton.add(carteWagon.name());
         }
         int i = 0;
         String choix = ".";
         ArrayList<String> choixInteractif = new ArrayList<>(choixBouton);
         while (i < n) {                                                                   //tant que i est inférieur au nombre de cartes à choisir (n en parametre)
-            choix = choisir("Choisir " + n + " carte à utiliser  : ", choixInteractif, choixBouton, false);
+            choix = choisir("Choisir " + n + " carte à utiliser  : ", choixInteractif, choixBouton, peutPasser);
             i++;
+            CouleurWagon choixObjet = null;
             for (int h = 0; h < cartesWagonPossibles.size() - 1; h++) {                  //pour toutes les cartes possibles
                 String nomCarteWagon = cartesWagonPossibles.get(h).name();                 //on les ajoute dans l'attribut carte wagon posée
                 if (nomCarteWagon.equals(choix)) {
                     cartesWagonPosees.add(cartesWagonPossibles.get(h));
+                    cartesWagon.remove(cartesWagonPossibles.get(h));
                     h = cartesWagonPossibles.size();
                 }
             }

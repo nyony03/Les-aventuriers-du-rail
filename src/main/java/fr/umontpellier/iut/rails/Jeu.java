@@ -87,6 +87,7 @@ public class Jeu implements Runnable {
         for (int i = 0; i < 14; i++) {
             pileCartesWagon.add(CouleurWagon.LOCOMOTIVE);
         }
+
         for (int i = 0; i < 12; i++) {
             pileCartesWagon.add(CouleurWagon.BLANC);
             pileCartesWagon.add(CouleurWagon.BLEU);

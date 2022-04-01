@@ -82,6 +82,10 @@ public class Joueur {
         return jeu;
     }
 
+    public int getScore() {
+        return score;
+    }
+
     public List<CouleurWagon> getCartesWagonPosees() {
         return cartesWagonPosees;
     }
@@ -314,12 +318,12 @@ public class Joueur {
         //choix1 = piocher carteWagon pas loco dans carteWagon visible
         //choix2 = choisir de piocher dans GRIS ou de piocher carteWagonvisible une
         boolean choixEstRoute = false;
-        for(CouleurWagon carteVisible : jeu.getCartesWagonVisibles()){
-            if(carteVisible.name().equals(choix) || choix.equals("GRIS")){
+        for (CouleurWagon carteVisible : jeu.getCartesWagonVisibles()) {
+            if (carteVisible.name().equals(choix) || choix.equals("GRIS")) {
                 choixEstRoute = true;
             }
         }
-        if(choixEstRoute){
+        if (choixEstRoute) {
             piocherCarteWagonVisible(choix);
         }
 
@@ -437,66 +441,70 @@ public class Joueur {
     public void piocherCarteWagonVisible(String choix) {
         ArrayList<String> choixBouton = new ArrayList<>();
         ArrayList<String> choixInteractif = new ArrayList<>();
-        int i = 0;
 
-        while (i < 2) {                                                                   //tant que i est inférieur au nombre de cartes à choisir (n en parametre)
-            i++;
-            if (choix.equals("LOCOMOTIVE")) {
-                System.out.println("ok");
-                jeu.retirerCarteWagonVisible(CouleurWagon.LOCOMOTIVE);
-                cartesWagon.add(CouleurWagon.LOCOMOTIVE);
-                i = 2;
-            }
-            else {
-                if (choix.equals("GRIS")) {
-                    //Si c'est gris, il pioche et il a le choix entre repioché dans GRIS ou pioché dans carteWagon visible sauf loco
-                    cartesWagon.add(jeu.piocherCarteWagon());
+        if (choix.equals("LOCOMOTIVE")) {
+            jeu.retirerCarteWagonVisible(CouleurWagon.LOCOMOTIVE);
+            cartesWagon.add(CouleurWagon.LOCOMOTIVE);
 
-                } else {
-                    //Si il prend une carte visible donc il prend la carte dans sa main et la carte est remplacé par la premiere de la pile
-
-                    boolean couleurTrouvee = false;
-                    CouleurWagon couleur = null;
-                    for (CouleurWagon carteVisible : jeu.getCartesWagonVisibles()) {
-                        if (!carteVisible.equals(CouleurWagon.LOCOMOTIVE) && !couleurTrouvee) {
-                            choixBouton.add(carteVisible.name());
-                            couleurTrouvee = true;
-                            couleur = carteVisible;
-                        }
-                    }
-                    jeu.retirerCarteWagonVisible(couleur);
-                }
-                for (CouleurWagon carteVisible : jeu.getCartesWagonVisibles()) {
-                    if (carteVisible.name().equals(choix)) {
-                        choixBouton.add(carteVisible.name());
-                    }
-                }
+        } else {
+            if (choix.equals("GRIS")) {
+                //Si c'est gris, il pioche et il a le choix entre repioché dans GRIS ou pioché dans carteWagon visible sauf loco
+                cartesWagon.add(jeu.piocherCarteWagon());
                 choixBouton.add("GRIS");
-                choixInteractif.retainAll(choixBouton);
-                choix = choisir("Choisir une carte à utiliser  : ", choixInteractif, choixBouton, false);
+                for (CouleurWagon carte : jeu.getCartesWagonVisibles()) {
+                    choixBouton.add(carte.name());
+                }
+
+            } else {
+                //S'il prend une carte visible donc il prend la carte dans sa main et la carte est remplacé par la premiere de la pile
+                boolean couleurTrouvee = false;
+                CouleurWagon couleur = null;
+                for (CouleurWagon carteVisible : jeu.getCartesWagonVisibles()) {
+                    if (!carteVisible.equals(CouleurWagon.LOCOMOTIVE) && choix.equals(carteVisible.name()) && !couleurTrouvee) {
+                        choixBouton.add(carteVisible.name());
+                        cartesWagon.add(carteVisible);
+                        couleurTrouvee = true;
+                        couleur = carteVisible;
+                    }
+                }
+                jeu.retirerCarteWagonVisible(couleur);
+                choixBouton.add("GRIS");
+                for (CouleurWagon carte : jeu.getCartesWagonVisibles()) {
+                    choixBouton.add(carte.name());
+                }
+
             }
+            String choix2 = "";
+            choix2 = choisir("Choisir une carte à garder ou piocher dans les cartes wagons  : ", choixInteractif, choixBouton, true);
+            if (choix2.equals("GRIS")) {
+                cartesWagon.add(jeu.piocherCarteWagon());
+            } else {
+                boolean cartePioche = false;
+                CouleurWagon carte = null;
+                for (CouleurWagon carteVisible : jeu.getCartesWagonVisibles()) {
+                    if (!carteVisible.equals(CouleurWagon.LOCOMOTIVE) && choix2.equals(carteVisible.name()) && !cartePioche) {
+                        choixBouton.add(carteVisible.name());
+                        cartesWagon.add(carteVisible);
+                        carte = carteVisible;
+                        cartePioche = true;
+                    }
+                }
+                jeu.retirerCarteWagonVisible(carte);
+                choixInteractif.retainAll(choixBouton);
+            }
+
         }
     }
 
-    public void scoreJoueur(int nbWagon) {
-        if (nbWagon == 1) {
-            score += 1;
-        }
-        if (nbWagon == 2) {
-            score += 2;
-        }
-        if (nbWagon == 3) {
-            score += 4;
-        }
-        if (nbWagon == 4) {
-            score += 7;
-        }
-        if (nbWagon == 6) {
-            score += 15;
-        }
-        if (nbWagon == 8) {
-            score += 21;
-        }
 
+    public void scoreJoueur(int nbWagon) {
+        switch (nbWagon) {
+            case 1 -> score += 1;
+            case 2 -> score += 2;
+            case 3 -> score += 4;
+            case 4 -> score += 7;
+            case 6 -> score += 15;
+            case 8 -> score += 21;
+        }
     }
 }

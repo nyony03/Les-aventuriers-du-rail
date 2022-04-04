@@ -19,13 +19,18 @@ public class Tunnel extends Route {
         super.utilisationRoute(j);
         int nbCarteRajout = 0;
         int nbCarteSupplementaire = 0;
+        ArrayList<CouleurWagon> cartesPiochee = new ArrayList<>();
         for (int i = 0; i < 3; i++) {
             CouleurWagon cartePiochee = j.getJeu().piocherCarteWagon();
+            cartesPiochee.add(cartePiochee);
             j.log(cartePiochee.name());
             // On pioche 3 cartes et à chaque pioche on vérifie si on doit payer une carte une carte de plus ou pas
             if(cartePiochee.equals(CouleurWagon.StringToObject(getCouleurChoisi())) || cartePiochee.equals(CouleurWagon.LOCOMOTIVE)){
                 nbCarteSupplementaire ++;
             }
+        }
+        for(CouleurWagon carte : cartesPiochee){
+            j.getJeu().defausserCarteWagon(carte);
         }
         // if pour dire il a assez de carte ou pas / s'il a assez de carte, s'il peut payer il passe les cartes, il peut faire un choix
         // et sinon on lui rend toutes les cartes dans sa carteWagon
@@ -39,6 +44,7 @@ public class Tunnel extends Route {
         }else{
           //il n'a pas assez de carte pour mettre les wagons dans le tunnel
             j.getCartesWagon().addAll(j.getCartesWagonPosees());
+            j.getCartesWagonPosees().clear();
         }
         return nbCarteRajout;
     }

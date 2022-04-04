@@ -112,7 +112,7 @@ public class Jeu implements Runnable {
             cartesWagonVisibles.add(pileCartesWagon.remove(0));
             if (loco == 3) {
                 defausseCartesWagon.addAll(cartesWagonVisibles);
-                cartesWagonVisibles.removeAll(cartesWagonVisibles);
+                cartesWagonVisibles.clear();
                 i = 0;
             }
         }
@@ -189,7 +189,7 @@ public class Jeu implements Runnable {
             for (int i = 0; i < 3; i++) {
                 choixDestinations.add(pileDestinations.remove(0));
             }
-            //joueur.choisirDestinations(choixDestinations, 2);
+            joueur.choisirDestinations(choixDestinations, 2);
         }
 
 
@@ -249,7 +249,7 @@ public class Jeu implements Runnable {
         if (pileCartesWagon.isEmpty() && defausseCartesWagon.isEmpty() && cartesWagonVisibles.size() < 5) {
             cartesWagonVisibles.add(c);
         } else {
-            defausseCartesWagon.add(c);
+            defausseCartesWagon.add(0 ,c);
         }
     }
 

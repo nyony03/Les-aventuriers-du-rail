@@ -41,7 +41,7 @@ public class Ferry extends Route {
             }
         }
         j.choisirCarteWagon(choix, getLongueur()-nbLocomotives, true);
-        return 0;
+        return -1;
     }
 
 }

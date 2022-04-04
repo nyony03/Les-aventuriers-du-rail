@@ -347,6 +347,7 @@ public class Joueur {
         //si choix = choisir une route
         for (Route route : routePossible) {
             if (choix.equals(route.getNom())) {
+                String veutPasser = "non";
                 int nbCarteRajout = route.utilisationRoute(this);
                 //si la route est un tunnel et qu'il a les cartes supplémentaires à jouer
                 if (nbCarteRajout>0) {
@@ -356,10 +357,12 @@ public class Joueur {
                             carteChoix.add(carte);
                         }
                     }
-                    choisirCarteWagon(carteChoix, nbCarteRajout, true);
+                    veutPasser = choisirCarteWagon(carteChoix, nbCarteRajout, true);
                 }
-                route.setProprietaire(this);
-                scoreJoueur(route.getLongueur());
+                if((nbCarteRajout >0 || nbCarteRajout ==-1) && !veutPasser.equals("passe")) {
+                    route.setProprietaire(this);
+                    scoreJoueur(route.getLongueur());
+                }
             }
         }
 
@@ -420,11 +423,15 @@ public class Joueur {
         ArrayList<String> choixInteractif = new ArrayList<>(choixBouton);
         while (i < n) {                                                                   //tant que i est inférieur au nombre de cartes à choisir (n en parametre)
             choix = choisir("Choisir " + n + " carte à utiliser  : ", choixInteractif, choixBouton, peutPasser);
+            if (choix.equals("")){
+                cartesWagon.addAll(cartesWagonPosees);
+                cartesWagonPosees.clear();
+                return "passe";
+            }
             i++;
-            CouleurWagon choixObjet = null;
-            for (int h = 0; h < cartesWagonPossibles.size() - 1; h++) {                  //pour toutes les cartes possibles
-                String nomCarteWagon = cartesWagonPossibles.get(h).name();                 //on les ajoute dans l'attribut carte wagon posée
-                if (nomCarteWagon.equals(choix)) {
+            for (int h = 0; h < cartesWagonPossibles.size(); h++) {                  //pour toutes les cartes possibles
+      //on les ajoute dans l'attribut carte wagon posée
+                if (cartesWagonPossibles.get(h).name().equals(choix)) {
                     cartesWagonPosees.add(cartesWagonPossibles.get(h));
                     cartesWagon.remove(cartesWagonPossibles.get(h));
                     h = cartesWagonPossibles.size();
@@ -443,7 +450,7 @@ public class Joueur {
                 }
                 choixBouton.retainAll(cartesGardees);
                 choixInteractif.retainAll(cartesGardees);
-            } else {
+            } else{
                 choixBouton.remove("LOCOMOTIVE");
                 choixInteractif.remove("LOCOMOTIVE");
             }

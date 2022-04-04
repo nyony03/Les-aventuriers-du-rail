@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 public class JoueurProfTest {
@@ -203,6 +204,9 @@ public class JoueurProfTest {
         );
 
         joueur2.jouerTour();
+        for (CouleurWagon carte : joueur2.getCartesWagon()){
+            System.out.println(carte.name());
+        }
         assertEquals(null, getRouteParNom("Brest - Pamplona").getProprietaire());
         assertEquals(joueur2, getRouteParNom("Bruxelles - Frankfurt").getProprietaire());
         assertTrue(TestUtils.contientExactement(
@@ -281,6 +285,10 @@ public class JoueurProfTest {
 
         joueur2.jouerTour();
         assertEquals(joueur2, getRouteParNom("Marseille - Zurich").getProprietaire());
+        for (CouleurWagon carte : jeu.getDefausseCartesWagon()){
+            System.out.println(carte);
+        }
+
         assertTrue(TestUtils.contientExactement(
                 joueur2.getCartesWagon(),
                 CouleurWagon.ROUGE, CouleurWagon.ROUGE));
@@ -329,6 +337,7 @@ public class JoueurProfTest {
         assertEquals(12, joueur2.getScore());
     }
 
+
     @Test
     void testJouerTourCapturerTunnelAbandonne() {
         clear();
@@ -353,6 +362,9 @@ public class JoueurProfTest {
         );
 
         joueur2.jouerTour();
+        for(CouleurWagon carte : jeu.getDefausseCartesWagon()) {
+            System.out.println("defausse "+carte.name());
+        }
         assertEquals(null, getRouteParNom("Marseille - Zurich").getProprietaire());
         assertTrue(TestUtils.contientExactement(
                 joueur2.getCartesWagon(),

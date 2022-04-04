@@ -138,7 +138,7 @@ public class Route {
             choix.add(CouleurWagon.LOCOMOTIVE);
         }
         couleurChoisi = j.choisirCarteWagon(choix, longueur, true);
-        return 0;
+        return -1;
     }
 
 }

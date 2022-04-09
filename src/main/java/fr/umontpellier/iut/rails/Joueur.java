@@ -98,6 +98,10 @@ public class Joueur {
         return destinations;
     }
 
+    public void setNbWagons(int nbWagons) {
+        this.nbWagons = nbWagons;
+    }
+
     /**
      * Attend une entrée de la part du joueur (au clavier ou sur la websocket) et
      * renvoie le choix du joueur.

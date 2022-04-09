@@ -100,6 +100,7 @@ public class Route {
         return data;
     }
 
+
     public boolean nbCarteRequis(Joueur j) {
         int nbCouleur = 0;
         if (getCouleur().equals(CouleurWagon.GRIS) && j.nbMaxCarteSimilaire() >= getLongueur()) {

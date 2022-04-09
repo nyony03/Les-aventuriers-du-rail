@@ -55,7 +55,7 @@ public class Joueur {
         this.jeu = jeu;
         this.couleur = couleur;
         nbGares = 3;
-        nbWagons = 45;
+        nbWagons = 5;
         cartesWagon = new ArrayList<>();
         cartesWagonPosees = new ArrayList<>();
         destinations = new ArrayList<>();
@@ -378,7 +378,7 @@ public class Joueur {
 
         for (CouleurWagon carte : cartesWagonPosees) {
             jeu.defausserCarteWagon(carte);
-//            cartesWagon.remove(carte);
+            nbWagons--;
         }
         cartesWagonPosees.clear();
     }

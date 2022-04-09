@@ -175,6 +175,40 @@ public class JeuTest {
                 CouleurWagon.JAUNE));
     }
 
+    @Test
+    void testCapturerTunnelrose_rajout2cartes() {
+        clear();
+        List<CouleurWagon> cartesWagon = joueur2.getCartesWagon();
+        cartesWagon.add(CouleurWagon.ROSE);
+        cartesWagon.add(CouleurWagon.ROSE);
+        cartesWagon.add(CouleurWagon.ROSE);
+        cartesWagon.add(CouleurWagon.ROSE);
+
+        // cartes qui seront piochées après avoir payé le prix initial du tunnel
+        jeu.getPileCartesWagon().add(0, CouleurWagon.LOCOMOTIVE);
+        jeu.getPileCartesWagon().add(0, CouleurWagon.ROSE);
+        jeu.getPileCartesWagon().add(0, CouleurWagon.JAUNE);
+
+        jeu.setInput(
+                "Marseille - Zurich", // coûte 2 ROSE (tunnel)
+                "ROSE", // ok
+                "ROSE", // ok
+                "ROSE", // ok
+                "ROSE"// ok
+        );
+
+        joueur2.jouerTour();
+        assertEquals(joueur2, getRouteParNom("Marseille - Zurich").getProprietaire());
+        assertTrue(TestUtils.contientExactement(
+                jeu.getDefausseCartesWagon(),
+                CouleurWagon.ROSE,
+                CouleurWagon.ROSE,
+                CouleurWagon.ROSE,
+                CouleurWagon.ROSE,
+                CouleurWagon.LOCOMOTIVE,
+                CouleurWagon.ROSE,
+                CouleurWagon.JAUNE));
+    }
 
     @Test
     void testCapturerTunnel() {

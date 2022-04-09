@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 public class JeuProfTest {
@@ -90,33 +89,4 @@ public class JeuProfTest {
             }
         }
     }
-
-    @Test
-    public void carte_enlevé_de_la_pile_quand_pioché(){
-        Jeu jeu = new Jeu(new String[]{"1", "2", "3"});
-        int taille_pile = jeu.getPileCartesWagon().size();
-        jeu.piocherCarteWagon();
-        assertEquals(taille_pile-1, jeu.getPileCartesWagon().size());
-    }
-
-    @Test
-    public void carte_pioché_est_la_dernière_carte_de_la_pile(){
-        Jeu jeu = new Jeu(new String[]{"1", "2", "3"});
-        CouleurWagon carte_haut_de_pile = jeu.getPileCartesWagon().get(0);
-        CouleurWagon carte_pioche = jeu.piocherCarteWagon();
-        assertEquals(carte_haut_de_pile, carte_pioche);
-    }
-
-    @Test
-    public void pioche_est_bien_mélangé() {
-        Jeu jeu = new Jeu(new String[]{"1", "2", "3"});
-        boolean toutes_pareilles = true;
-        List<CouleurWagon> cartes = jeu.getPileCartesWagon();
-        CouleurWagon première_carte = cartes.get(0);
-        for (int i = 1; i < 12 && toutes_pareilles; i++) {
-            toutes_pareilles = première_carte == cartes.get(i);
-        }
-        assertFalse(toutes_pareilles);
-    }
-
 }

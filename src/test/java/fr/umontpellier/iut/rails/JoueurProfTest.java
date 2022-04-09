@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 public class JoueurProfTest {
@@ -18,7 +17,7 @@ public class JoueurProfTest {
 
     /**
      * Renvoie la route du jeu dont le nom est passé en argument
-     * 
+     *
      * @param nom le nom de la route
      * @return la route du jeu dont le nom est passé en argument (ou null si aucune
      *         route ne correspond)
@@ -34,7 +33,7 @@ public class JoueurProfTest {
 
     /**
      * Renvoie la ville du jeu dont le nom est passé en argument
-     * 
+     *
      * @param nom le nom de la ville
      * @return la ville du jeu dont le nom est passé en argument (ou null si aucune
      *         ville ne correspond)
@@ -204,9 +203,6 @@ public class JoueurProfTest {
         );
 
         joueur2.jouerTour();
-        for (CouleurWagon carte : joueur2.getCartesWagon()){
-            System.out.println(carte.name());
-        }
         assertEquals(null, getRouteParNom("Brest - Pamplona").getProprietaire());
         assertEquals(joueur2, getRouteParNom("Bruxelles - Frankfurt").getProprietaire());
         assertTrue(TestUtils.contientExactement(
@@ -285,10 +281,6 @@ public class JoueurProfTest {
 
         joueur2.jouerTour();
         assertEquals(joueur2, getRouteParNom("Marseille - Zurich").getProprietaire());
-        for (CouleurWagon carte : jeu.getDefausseCartesWagon()){
-            System.out.println(carte);
-        }
-
         assertTrue(TestUtils.contientExactement(
                 joueur2.getCartesWagon(),
                 CouleurWagon.ROUGE, CouleurWagon.ROUGE));
@@ -337,7 +329,6 @@ public class JoueurProfTest {
         assertEquals(12, joueur2.getScore());
     }
 
-
     @Test
     void testJouerTourCapturerTunnelAbandonne() {
         clear();
@@ -362,9 +353,6 @@ public class JoueurProfTest {
         );
 
         joueur2.jouerTour();
-        for(CouleurWagon carte : jeu.getDefausseCartesWagon()) {
-            System.out.println("defausse "+carte.name());
-        }
         assertEquals(null, getRouteParNom("Marseille - Zurich").getProprietaire());
         assertTrue(TestUtils.contientExactement(
                 joueur2.getCartesWagon(),
@@ -441,133 +429,4 @@ public class JoueurProfTest {
                 CouleurWagon.ROUGE));
         assertEquals(2, joueur3.getNbGares());
     }
-
-    @Test
-    void testCapturerRouteCouleur() {
-        clear();
-        List<CouleurWagon> cartesWagon = joueur2.getCartesWagon();
-        cartesWagon.add(CouleurWagon.BLEU);
-        cartesWagon.add(CouleurWagon.BLEU);
-        cartesWagon.add(CouleurWagon.ROUGE);
-        cartesWagon.add(CouleurWagon.ROUGE);
-        cartesWagon.add(CouleurWagon.LOCOMOTIVE);
-
-        jeu.setInput(
-                "Bruxelles - Frankfurt", // coûte 2 BLEU
-                "LOCOMOTIVE", // ok
-                "ROUGE", // ne convient pas pour une route de 2 BLEU
-                "BLEU" // ok
-
-        );
-
-        joueur2.jouerTour();
-        assertEquals(joueur2, getRouteParNom("Bruxelles - Frankfurt").getProprietaire());
-        assertTrue(TestUtils.contientExactement(
-                joueur2.getCartesWagon(),
-                CouleurWagon.BLEU, CouleurWagon.ROUGE, CouleurWagon.ROUGE));
-        assertTrue(TestUtils.contientExactement(
-                jeu.getDefausseCartesWagon(),
-                CouleurWagon.BLEU,
-                CouleurWagon.LOCOMOTIVE));
-    }
-
-    @Test
-    void testJouerTourConstruireRouteGrisAvecLoco() {
-        clear();
-        List<CouleurWagon> cartesWagon = joueur2.getCartesWagon();
-        cartesWagon.add(CouleurWagon.BLEU);
-        cartesWagon.add(CouleurWagon.ROUGE);
-        cartesWagon.add(CouleurWagon.ROUGE);
-        cartesWagon.add(CouleurWagon.LOCOMOTIVE);
-        cartesWagon.add(CouleurWagon.LOCOMOTIVE);
-
-        jeu.setInput(
-                "Bruxelles - Frankfurt", // coûte 2 BLEU
-                "LOCOMOTIVE",
-                "LOCOMOTIVE"
-        );
-
-        joueur2.jouerTour();
-        assertEquals(joueur2, getRouteParNom("Bruxelles - Frankfurt").getProprietaire());
-        assertTrue(TestUtils.contientExactement(
-                joueur2.getCartesWagon(),
-                CouleurWagon.BLEU, CouleurWagon.ROUGE, CouleurWagon.ROUGE));
-        assertTrue(TestUtils.contientExactement(
-                jeu.getDefausseCartesWagon(),
-                CouleurWagon.LOCOMOTIVE,
-                CouleurWagon.LOCOMOTIVE));
-    }
-
-    @Test
-    void testCapturerTunnelLocomotivepossible() {
-        clear();
-        List<CouleurWagon> cartesWagon = joueur2.getCartesWagon();
-        cartesWagon.add(CouleurWagon.LOCOMOTIVE);
-        cartesWagon.add(CouleurWagon.LOCOMOTIVE);
-        cartesWagon.add(CouleurWagon.LOCOMOTIVE);
-        cartesWagon.add(CouleurWagon.LOCOMOTIVE);
-
-        // cartes qui seront piochées après avoir payé le prix initial du tunnel
-        jeu.getPileCartesWagon().add(0, CouleurWagon.LOCOMOTIVE);
-        jeu.getPileCartesWagon().add(0, CouleurWagon.ROSE);
-        jeu.getPileCartesWagon().add(0, CouleurWagon.JAUNE);
-
-        jeu.setInput(
-                "Marseille - Zurich", // coûte 2 ROSE (tunnel)
-                "LOCOMOTIVE", // ok
-                "LOCOMOTIVE", // ok
-                "LOCOMOTIVE"// ok
-        );
-
-        joueur2.jouerTour();
-        assertEquals(joueur2, getRouteParNom("Marseille - Zurich").getProprietaire());
-        assertTrue(TestUtils.contientExactement(
-                jeu.getDefausseCartesWagon(),
-                CouleurWagon.LOCOMOTIVE,
-                CouleurWagon.LOCOMOTIVE,
-                CouleurWagon.LOCOMOTIVE,
-                CouleurWagon.LOCOMOTIVE,
-                CouleurWagon.ROSE,
-                CouleurWagon.JAUNE));
-    }
-
-
-    @Test
-    void testCapturerTunnel() {
-        clear();
-        List<CouleurWagon> cartesWagon = joueur2.getCartesWagon();
-        cartesWagon.add(CouleurWagon.ROSE);
-        cartesWagon.add(CouleurWagon.ROSE);
-        cartesWagon.add(CouleurWagon.ROUGE);
-        cartesWagon.add(CouleurWagon.ROUGE);
-        cartesWagon.add(CouleurWagon.LOCOMOTIVE);
-
-        // cartes qui seront piochées après avoir payé le prix initial du tunnel
-        jeu.getPileCartesWagon().add(0, CouleurWagon.BLEU);
-        jeu.getPileCartesWagon().add(0, CouleurWagon.ROSE);
-        jeu.getPileCartesWagon().add(0, CouleurWagon.JAUNE);
-
-        jeu.setInput(
-                "Marseille - Zurich", // coûte 2 ROSE (tunnel)
-                "ROSE", // ok
-                "LOCOMOTIVE", // ok
-                "ROUGE", //passe pas
-                "ROSE"// coût supplémentaire du tunnel
-        );
-
-        joueur2.jouerTour();
-        assertEquals(joueur2, getRouteParNom("Marseille - Zurich").getProprietaire());
-        assertTrue(TestUtils.contientExactement(
-                joueur2.getCartesWagon(),
-                CouleurWagon.ROUGE, CouleurWagon.ROUGE));
-        assertTrue(TestUtils.contientExactement(
-                jeu.getDefausseCartesWagon(),
-                CouleurWagon.ROSE,
-                CouleurWagon.ROSE,
-                CouleurWagon.LOCOMOTIVE,
-                CouleurWagon.BLEU,
-                CouleurWagon.ROSE,
-                CouleurWagon.JAUNE));
-    }
-
 }

@@ -397,7 +397,6 @@ public class Joueur {
             }
         }
         nbMaxCarteSimilaire+=Collections.frequency(cartesWagon, CouleurWagon.LOCOMOTIVE);
-        System.out.println("nbMaxCarteSim = "+nbMaxCarteSimilaire);
         return nbMaxCarteSimilaire;
     }
 

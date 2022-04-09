@@ -105,16 +105,10 @@ public class Route {
         if (getCouleur().equals(CouleurWagon.GRIS) && j.nbMaxCarteSimilaire() >= getLongueur()) {
             return true;
         }
-        for (CouleurWagon carteWagon : j.getCartesWagon()) {
-            if (carteWagon.equals(getCouleur())) {
-                nbCouleur++;
-            }
-            if (carteWagon.equals(CouleurWagon.LOCOMOTIVE)) {
-                nbCouleur++;
-            }
-        }
-        return (j.getCartesWagon().contains(getCouleur()) || (j.getCartesWagon().contains(CouleurWagon.LOCOMOTIVE)) && getLongueur() <= nbCouleur);
+        nbCouleur = Collections.frequency(j.getCartesWagon(), getCouleur())+Collections.frequency(j.getCartesWagon(), CouleurWagon.LOCOMOTIVE);
+        return (getLongueur() <= nbCouleur);
     }
+//    j.getCartesWagon().contains(getCouleur()) || (j.getCartesWagon().contains(CouleurWagon.LOCOMOTIVE)) &&
 
     public int utilisationRoute(Joueur j) {
         ArrayList<CouleurWagon> choix = new ArrayList<>();

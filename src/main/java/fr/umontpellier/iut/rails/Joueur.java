@@ -385,18 +385,12 @@ public class Joueur {
 
 
     public int nbCartesCouleur(CouleurWagon couleur) {
-        int nbCartesCouleur = 0;
-        for (CouleurWagon carteWagon : cartesWagon) {
-            if (carteWagon.equals(couleur)) {
-                nbCartesCouleur++;
-            }
-        }
-        return nbCartesCouleur;
+        return Collections.frequency(cartesWagon, couleur);
     }
 
 
     public int nbMaxCarteSimilaire() {
-        int nbMaxCarteSimilaire = Collections.frequency(cartesWagon, CouleurWagon.LOCOMOTIVE);
+        int nbMaxCarteSimilaire = 0;
         int nbCarteSimilaire = 0;
         for (CouleurWagon couleur : CouleurWagon.getCouleursSimples()) {
             nbCarteSimilaire = Collections.frequency(cartesWagon, couleur);
@@ -404,6 +398,8 @@ public class Joueur {
                 nbMaxCarteSimilaire = nbCarteSimilaire;
             }
         }
+        nbMaxCarteSimilaire+=Collections.frequency(cartesWagon, CouleurWagon.LOCOMOTIVE);
+        System.out.println("nbMaxCarteSim = "+nbMaxCarteSimilaire);
         return nbMaxCarteSimilaire;
     }
 

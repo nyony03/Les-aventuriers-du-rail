@@ -135,5 +135,18 @@ public class Route {
         return -1;
     }
 
+    public boolean verificationRouteDouble(Joueur j){
+        if(nom.contains("1") || nom.contains("2")){
+            for(Route route : j.getJeu().getRoutes()){
+                if(route.getVille1() == this.ville1 && route.getVille2() == this.ville2){
+                    if(route.getProprietaire() != null){
+                        return route.getProprietaire().equals(j);
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
 }
 

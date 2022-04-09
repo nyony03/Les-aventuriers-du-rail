@@ -301,7 +301,7 @@ public class Joueur {
             }
         }
         for (Route route : jeu.getRoutes()) {
-            if (route.getProprietaire() == null && route.nbCarteRequis(this)) {
+            if (route.getProprietaire() == null && route.nbCarteRequis(this) && !route.verificationRouteDouble(this)) {
                 choixInteractif.add(route.getNom());
                 routePossible.add(route);
             }

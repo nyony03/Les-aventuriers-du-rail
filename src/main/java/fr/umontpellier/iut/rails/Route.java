@@ -113,7 +113,7 @@ public class Route {
                 nbCouleur++;
             }
         }
-        return (j.getCartesWagon().contains(getCouleur()) && getLongueur() <= nbCouleur);
+        return (j.getCartesWagon().contains(getCouleur()) || (j.getCartesWagon().contains(CouleurWagon.LOCOMOTIVE)) && getLongueur() <= nbCouleur);
     }
 
     public int utilisationRoute(Joueur j) {

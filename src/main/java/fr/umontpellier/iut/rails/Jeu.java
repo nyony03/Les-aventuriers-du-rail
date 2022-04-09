@@ -214,6 +214,7 @@ public class Jeu implements Runnable {
             }
             enCours = false;
         }
+        prompt("Fin de partie", new ArrayList<>(), false);
     }
 
 

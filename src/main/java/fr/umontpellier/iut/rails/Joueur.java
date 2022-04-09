@@ -383,12 +383,6 @@ public class Joueur {
         cartesWagonPosees.clear();
     }
 
-
-    public int nbCartesCouleur(CouleurWagon couleur) {
-        return Collections.frequency(cartesWagon, couleur);
-    }
-
-
     public int nbMaxCarteSimilaire() {
         int nbMaxCarteSimilaire = 0;
         int nbCarteSimilaire = 0;

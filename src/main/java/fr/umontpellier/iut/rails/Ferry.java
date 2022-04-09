@@ -16,7 +16,7 @@ public class Ferry extends Route {
 
     @Override
     public boolean nbCarteRequis(Joueur j) {
-        return super.nbCarteRequis(j) && j.nbCartesCouleur(CouleurWagon.LOCOMOTIVE) >= nbLocomotives;
+        return super.nbCarteRequis(j) && Collections.frequency(j.getCartesWagon(), CouleurWagon.LOCOMOTIVE) >= nbLocomotives;
     }
 
     @Override

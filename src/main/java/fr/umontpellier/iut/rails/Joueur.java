@@ -484,7 +484,6 @@ public class Joueur {
                 CouleurWagon couleur = null;
                 for (CouleurWagon carteVisible : jeu.getCartesWagonVisibles()) {
                     if (!carteVisible.equals(CouleurWagon.LOCOMOTIVE) && choix.equals(carteVisible.name()) && !couleurTrouvee) {
-                        choixBouton.add(carteVisible.name());
                         cartesWagon.add(carteVisible);
                         couleurTrouvee = true;
                         couleur = carteVisible;

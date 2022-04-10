@@ -53,6 +53,8 @@ public class Jeu implements Runnable {
      */
     private List<String> log;
 
+    private int nbLocoCartesWagonsVisibles;
+
     public Jeu(String[] nomJoueurs) {
         /*
          * ATTENTION : Cette méthode est à réécrire.
@@ -105,15 +107,16 @@ public class Jeu implements Runnable {
             }
         }
 
-        for (int i = 0, loco = 0; i < 5; i++) {
+        for (int i = 0; i < 5; i++) {
             if (pileCartesWagon.get(0) == CouleurWagon.LOCOMOTIVE) {
-                loco++;
+                nbLocoCartesWagonsVisibles++;
             }
             cartesWagonVisibles.add(pileCartesWagon.remove(0));
-            if (loco == 3) {
+            if (nbLocoCartesWagonsVisibles == 3) {
                 defausseCartesWagon.addAll(cartesWagonVisibles);
                 cartesWagonVisibles.clear();
                 i = 0;
+                nbLocoCartesWagonsVisibles = 0;
             }
         }
 
@@ -195,20 +198,20 @@ public class Jeu implements Runnable {
         // déroulement d'une partie
         boolean dernierTour = false;
         boolean enCours = true;
-        while(enCours) {
-            int dernierJoueur =0;
+        while (enCours) {
+            int dernierJoueur = 0;
             while (!dernierTour) {
-                for(int i = 0; i< joueurs.size(); i++){
+                for (int i = 0; i < joueurs.size(); i++) {
                     joueurCourant = joueurs.get(i);
                     joueurCourant.jouerTour();
                     if (joueurCourant.getNbWagons() < 3 && dernierJoueur == 0) {
                         dernierTour = true;
-                        dernierJoueur = i+1;
+                        dernierJoueur = i + 1;
                     }
                 }
             }
 
-            for (int j = 0 ; j<dernierJoueur; j++) {
+            for (int j = 0; j < dernierJoueur; j++) {
                 joueurCourant = joueurs.get(j);
                 joueurCourant.jouerTour();
             }
@@ -216,7 +219,6 @@ public class Jeu implements Runnable {
         }
         prompt("Fin de partie", new ArrayList<>(), false);
     }
-
 
 
     /**
@@ -233,7 +235,7 @@ public class Jeu implements Runnable {
         if (pileCartesWagon.isEmpty() && defausseCartesWagon.isEmpty() && cartesWagonVisibles.size() < 5) {
             cartesWagonVisibles.add(c);
         } else {
-            defausseCartesWagon.add(0 ,c);
+            defausseCartesWagon.add(0, c);
         }
     }
 
@@ -263,14 +265,16 @@ public class Jeu implements Runnable {
      */
     public void retirerCarteWagonVisible(CouleurWagon c) {
         cartesWagonVisibles.remove(c);
-        int locomotive = 0;
-        while (cartesWagonVisibles.size() < 5 && !pileCartesWagon.isEmpty()){
-            if(pileCartesWagon.get(0) == CouleurWagon.LOCOMOTIVE){
-            locomotive++;
-        }
+        while (cartesWagonVisibles.size() < 5 && !pileCartesWagon.isEmpty()) {
+            if (pileCartesWagon.get(0) == CouleurWagon.LOCOMOTIVE) {
+                nbLocoCartesWagonsVisibles += 1;
+                System.out.println(nbLocoCartesWagonsVisibles);
+            }
             cartesWagonVisibles.add(pileCartesWagon.remove(0));
-            if(locomotive == 3){
-                cartesWagonVisibles.removeAll(defausseCartesWagon);
+            if (nbLocoCartesWagonsVisibles == 3) {
+                defausseCartesWagon.addAll(cartesWagonVisibles);
+                cartesWagonVisibles.clear();
+                nbLocoCartesWagonsVisibles = 0;
             }
         }
     }

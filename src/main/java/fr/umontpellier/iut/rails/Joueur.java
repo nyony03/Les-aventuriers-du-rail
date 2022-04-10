@@ -429,6 +429,7 @@ public class Joueur {
                     cartesWagonPosees.add(cartesWagonPossibles.get(h));
                     cartesWagon.remove(cartesWagonPossibles.get(h));
                     h = cartesWagonPossibles.size();
+
                 }
             }
             int occurence = Collections.frequency(choixBouton, choix);
@@ -443,7 +444,9 @@ public class Joueur {
                     cartesGardees.add("LOCOMOTIVE");
                 }
                 choixBouton.retainAll(cartesGardees);
-                choixInteractif.retainAll(cartesGardees);
+                choixBouton.remove(choix);
+                choixInteractif.clear();
+                choixInteractif.addAll(choixBouton);
             } else {
                 choixBouton.remove("LOCOMOTIVE");
                 choixInteractif.remove("LOCOMOTIVE");

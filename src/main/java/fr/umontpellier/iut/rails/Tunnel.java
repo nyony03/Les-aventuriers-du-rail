@@ -21,8 +21,8 @@ public class Tunnel extends Route {
         int nbCarteSupplementaire = 0;
         ArrayList<CouleurWagon> cartesPiochee = new ArrayList<>();
         CouleurWagon cartePiochee = j.getJeu().piocherCarteWagon();
+        j.log("Les cartes piochées sont :");
         for (int i = 0; i < 3; i++) {
-
             cartesPiochee.add(cartePiochee);
             j.log(cartePiochee.name());
             // On pioche 3 cartes et à chaque pioche on vérifie si on doit payer une carte une carte de plus ou pas

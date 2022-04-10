@@ -294,8 +294,12 @@ public class Joueur {
         for (CouleurWagon couleurWagon : jeu.getCartesWagonVisibles()) {
             choixInteractif.add("" + couleurWagon.name());
         }
-        choixInteractif.add("GRIS");
-        choixInteractif.add("destinations");
+        if (!getJeu().getPileCartesWagon().isEmpty() || !getJeu().getDefausseCartesWagon().isEmpty()){
+            choixInteractif.add("GRIS");
+        }
+        if (!getJeu().getPileDestinations().isEmpty()) {
+            choixInteractif.add("destinations");
+        }
         if (nbGares == 3 && nbMaxCarteSimilaire() >= 1 || nbGares == 2 && nbMaxCarteSimilaire() >= 2 || nbGares == 1 && nbMaxCarteSimilaire() >= 3) {
             for (Ville gare : jeu.getVilles()) {
                 if (gare.getProprietaire() == null) {
@@ -462,7 +466,10 @@ public class Joueur {
             if (choix.equals("GRIS")) {
                 //Si c'est gris, il pioche et il a le choix entre repioché dans GRIS ou pioché dans carteWagon visible sauf loco
                 cartesWagon.add(jeu.piocherCarteWagon());
-                choixBouton.add("GRIS");
+                if (!getJeu().getPileCartesWagon().isEmpty() || !getJeu().getDefausseCartesWagon().isEmpty()){
+                    choixBouton.add("GRIS");
+                }
+
                 for (CouleurWagon carte : jeu.getCartesWagonVisibles()) {
                     choixBouton.add(carte.name());
                 }
@@ -480,7 +487,9 @@ public class Joueur {
                     }
                 }
                 jeu.retirerCarteWagonVisible(couleur);
-                choixBouton.add("GRIS");
+                if (!getJeu().getPileCartesWagon().isEmpty() || !getJeu().getDefausseCartesWagon().isEmpty()){
+                    choixBouton.add("GRIS");
+                }
                 for (CouleurWagon carte : jeu.getCartesWagonVisibles()) {
                     choixBouton.add(carte.name());
                 }

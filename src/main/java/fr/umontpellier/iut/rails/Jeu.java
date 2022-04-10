@@ -262,10 +262,9 @@ public class Jeu implements Runnable {
      * (remise à 5, éventuellement remélangée si 3 locomotives visibles)
      */
     public void retirerCarteWagonVisible(CouleurWagon c) {
-        System.out.println("ici");
         cartesWagonVisibles.remove(c);
         int locomotive = 0;
-        while (cartesWagonVisibles.size() < 5){
+        while (cartesWagonVisibles.size() < 5 && !pileCartesWagon.isEmpty()){
             if(pileCartesWagon.get(0) == CouleurWagon.LOCOMOTIVE){
             locomotive++;
         }

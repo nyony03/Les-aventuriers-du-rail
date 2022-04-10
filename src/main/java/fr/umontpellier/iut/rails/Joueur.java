@@ -341,7 +341,7 @@ public class Joueur {
             for (Destination desti : jeu.getPileDestinations()) {
                 System.out.println(desti);
             }
-            while (destinationsPiochees.size() <= 2) {
+            while (destinationsPiochees.size() <= 2 && !getJeu().getPileDestinations().isEmpty()) {
                 destinationsPiochees.add(jeu.piocherDestination());
             }
 

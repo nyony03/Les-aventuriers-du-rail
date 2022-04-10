@@ -265,17 +265,26 @@ public class Jeu implements Runnable {
      */
     public void retirerCarteWagonVisible(CouleurWagon c) {
         cartesWagonVisibles.remove(c);
-        while (cartesWagonVisibles.size() < 5 && !pileCartesWagon.isEmpty()) {
-            if (pileCartesWagon.get(0) == CouleurWagon.LOCOMOTIVE) {
-                nbLocoCartesWagonsVisibles += 1;
-                System.out.println(nbLocoCartesWagonsVisibles);
+        while (cartesWagonVisibles.size() < 5 && (!pileCartesWagon.isEmpty() || !defausseCartesWagon.isEmpty())) {
+            if (!pileCartesWagon.isEmpty()){
+                if (pileCartesWagon.get(0) == CouleurWagon.LOCOMOTIVE) {
+                    nbLocoCartesWagonsVisibles += 1;
+                    System.out.println(nbLocoCartesWagonsVisibles);
+                }
+                cartesWagonVisibles.add(pileCartesWagon.remove(0));
+                if (nbLocoCartesWagonsVisibles == 3) {
+                    defausseCartesWagon.addAll(cartesWagonVisibles);
+                    cartesWagonVisibles.clear();
+                    nbLocoCartesWagonsVisibles = 0;
+                }
+            } else {
+                pileCartesWagon.addAll(defausseCartesWagon);
+                defausseCartesWagon.clear();
+                while (cartesWagonVisibles.size() < 5 && (!pileCartesWagon.isEmpty())){
+                    cartesWagonVisibles.add(pileCartesWagon.remove(0));
+                }
             }
-            cartesWagonVisibles.add(pileCartesWagon.remove(0));
-            if (nbLocoCartesWagonsVisibles == 3) {
-                defausseCartesWagon.addAll(cartesWagonVisibles);
-                cartesWagonVisibles.clear();
-                nbLocoCartesWagonsVisibles = 0;
-            }
+
         }
     }
 

@@ -309,7 +309,8 @@ public class Joueur {
             }
         }
         for (Route route : jeu.getRoutes()) {
-            if (route.getProprietaire() == null && route.nbCarteRequis(this) && !route.verificationRouteDouble(this)) {
+            if (route.getProprietaire() == null && route.nbCarteRequis(this) && !route.verificationRouteDouble(this)
+                    && nbWagons>=route.getLongueur()) {
                 choixInteractif.add(route.getNom());
                 routePossible.add(route);
             }
